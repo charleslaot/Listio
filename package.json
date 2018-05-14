@@ -1,0 +1,19 @@
+{
+  "name": "node-capstone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krloslao/Node-Capstone.git"
+  },
+  "author": "Carlos Trujillo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/krloslao/Node-Capstone/issues"
+  },
+  "homepage": "https://github.com/krloslao/Node-Capstone#readme"
+}
