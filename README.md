@@ -15,7 +15,7 @@
     User should be able to:
         + Login or Register(Sign Up) with email/username/Google/Facebook
         + Reset/recover their password
-        + Search & Filter the database/API for songs.
+        + Search & Filter the music API for songs.
         + Create/Read/Update/Delete playlists. (CRUD)    
         + Play songs/playlist from the database/API and from other users
         + Put price to their playlist and sell it 
@@ -28,7 +28,7 @@
 
 # MVP
     + Login or Sign Up with username
-    + Search & Filter the database/API for songs.
+    + Search & Filter the music API for songs.
     + Create/Read/Update/Delete playlists. (CRUD)    
     + Filter/Search playlists by title/time/genre/creator/songsNumber/lastModified/...
 
