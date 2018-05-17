@@ -37,8 +37,7 @@
     + Login Screen
     + Sign Up Screen
     + Screen for seeing, filter/search or delete the user's playlists (Home Playlist Screen)
-    + Screen for create and/or edit the user's playlist (Create/Edit Screen)
-    + Screen for confirming the deletion of playlist (Confirmation Screen)
+    + Screen for create and/or edit the user's playlist (Create/Edit Screen)    
 
 
 # USER FLOW
@@ -56,7 +55,7 @@
         - User click on create playlist button --> Create/Edit Screen
         - User click on edit playlist button -->  Create/Edit Screen
         - User click on playlist name -->  Create/Edit Screen
-        - User click on delete playlist button --> Confirmation Screen --> Delete Playlist        
+        - User click on delete playlist button --> Confirmation Popup --> Delete Playlist        
         - User filter and/or search on filter menu and/or search bar --> Show matching playlists
 
     + Create/Edit Screen
