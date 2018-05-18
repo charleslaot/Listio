@@ -12,54 +12,56 @@
 
 
 # USER STORIES
-    User should be able to:
-        + Login or Register(Sign Up) with email/username/Google/Facebook
-        + Reset/recover their password
-        + Search & Filter the music API for songs.
-        + Create/Read/Update/Delete playlists. (CRUD)    
-        + Play songs/playlist from the database/API and from other users
-        + Put price to their playlist and sell it 
-        + Buy playlist
-        + Filter/Search/Sort playlists by title/time/genre/creator/songsNumber/lastModified/...        
-        + Rate playlist and sellers and/or leave comments
-        + Upload your songs(mp3, flac, wav) or playlist(m3u, cue, csv)
-        + Share playlist between users and in Facebook, Twitter, Google+ 
+
++ Login or Register(Sign Up) with email/username/Google/Facebook
++ Reset/recover their password
++ Search & Filter the music API for songs.
++ Create/Read/Update/Delete playlists. (CRUD)    
++ Play songs/playlist from the database/API and from other users
++ Put price to their playlist and sell it 
++ Buy playlist
++ Filter/Search/Sort playlists by title/time/genre/creator/songsNumber/lastModified/...        
++ Rate playlist and sellers and/or leave comments
++ Upload your songs(mp3, flac, wav) or playlist(m3u, cue, csv)
++ Share playlist between users and in Facebook, Twitter, Google+ 
 
 
 # MVP
-    + Login or Sign Up with username
-    + Search & Filter the music API for songs.
-    + Create/Read/Update/Delete playlists. (CRUD)    
-    + Filter/Search playlists by title/time/genre/creator/songsNumber/lastModified/...
+
++ Login or Sign Up with username
++ Search & Filter the music API for songs.
++ Create/Read/Update/Delete playlists. (CRUD)    
++ Filter/Search playlists by title/time/genre/creator/songsNumber/lastModified/...
 
 
 # USER SCREENS
-    + Login Screen
-    + Sign Up Screen
-    + Screen for seeing, filter/search or delete the user's playlists (Home Playlist Screen)
-    + Screen for create and/or edit the user's playlist (Create/Edit Screen)    
+
++ Login Screen
++ Sign Up Screen
++ Screen for seeing, filter/search or delete the user's playlists (Home Playlist Screen)
++ Screen for create and/or edit the user's playlist (Create/Edit Screen)    
 
 
 # USER FLOW
 
-    + Login Screen
-        - User enter valid username and password --> Home Playlist Screen
-        - User enter invalid username or password --> Error Message
++ Login Screen
+    - User enter valid username and password --> Home Playlist Screen
+    - User enter invalid username or password --> Error Message
 
-    + Sign Up Screen
-        - User enter valid username and password --> Success Message & redirects to Login Screen
-        - User enter invalid username or password --> Error Message
-        - User enter already taken username --> Warning Message & redirects to Login Screen
-        
-    + Home Playlist Screen 
-        - User click on create playlist button --> Create/Edit Screen
-        - User click on edit playlist button -->  Create/Edit Screen
-        - User click on playlist name -->  Create/Edit Screen
-        - User click on delete playlist button --> Confirmation Popup --> Delete Playlist        
-        - User filter and/or search on filter menu and/or search bar --> Show matching playlists
++ Sign Up Screen
+    - User enter valid username and password --> Success Message & redirects to Login Screen
+    - User enter invalid username or password --> Error Message
+    - User enter already taken username --> Warning Message & redirects to Login Screen
+    
++ Home Playlist Screen 
+    - User click on create playlist button --> Create/Edit Screen
+    - User click on edit playlist button -->  Create/Edit Screen
+    - User click on playlist name -->  Create/Edit Screen
+    - User click on delete playlist button --> Confirmation Popup --> Delete Playlist        
+    - User filter and/or search on filter menu and/or search bar --> Show matching playlists
 
-    + Create/Edit Screen
-        - User search on search bar --> Show matching songs from API
-        - User click on matching song from search --> Add to playlists
-        - User click on delete song button --> Delete song
-        - User click on back arrow button --> Home Playlist Screen
++ Create/Edit Screen
+    - User search on search bar --> Show matching songs from API
+    - User click on matching song from search --> Add to playlists
+    - User click on delete song button --> Delete song
+    - User click on back arrow button --> Home Playlist Screen
