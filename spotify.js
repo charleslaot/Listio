@@ -1,20 +1,20 @@
-// authenticate - return token
+// authenticate - return access_token
 
-//{400 401 if bad token / 200 OK} search(searchTerm, token)
+//{400 401 if bad access_token / 200 OK} search(searchTerm, access_token)
 
 const retry = require('retry');
-const SPOTIFY_API_TOKEN_URL = 'https://accounts.spotify.com/api/token';
+const request = require('request');
+const SPOTIFY_API_TOKEN_URL = 'https://accounts.spotify.com/api/access_token';
 const SPOTIFY_SEARCH_URL = "https://api.spotify.com/v1/search";
 const clientID = '1ee741ccb75d4d068181e7ec60222852';
 const clientSECRET = '57bf8033f6284c62b63ff98d1a2eea4f';
-const query = JSON.stringify(req.query);
-var token = '';
+var access_token = '';
 
-function getTrackOptions(token) {
+function getTrackOptions(access_token) {
     const trackOptions = {
         url: SPOTIFY_SEARCH_URL,
         headers: {
-            'Authorization': `Bearer ${token}`,
+            'Authorization': `Bearer ${access_token}`,
             'Content-Type': 'application/json',
         },
         qs: {
@@ -41,14 +41,14 @@ const TokenOptions = {
 function requestTracks() {
     console.log('inside req tracks');
     return new Promise((resolve, reject) => {
-        request(getTrackOptions(token), function (error, response, body) {
+        request(getTrackOptions(access_token), function (error, response, body) {
 
             if (response.statusCode === 200) {
                 console.log('---- 200 OK tracks received');
                 resolve(response.statusCode);
-            } else if ((JSON.parse(body).error.message === "The access token expired") ||
+            } else if ((JSON.parse(body).error.message === "The access access_token expired") ||
                 (response.statusCode === 400 || 401)) {
-                console.log('Expired or empty token:', token);
+                console.log('Expired or empty access_token:', access_token);
                 resolve(response.statusCode);
             } else {
                 console.log('oops, something went wrong');
@@ -58,37 +58,61 @@ function requestTracks() {
     });
 };
 
+// function requestToken() {
+//     console.log('inside req tokens');
+//     return new Promise((resolve, reject) => {
+//         request(TokenOptions, function (error, response, body) {
+
+//             if (response.statusCode === 200) {
+//                 access_token = body.access_token;
+//                 console.log('----- 200 OK  access_token generated');
+//                 console.log('access_token =', access_token);
+//                 resolve(access_token)
+//             } else {
+//                 console.log('oops, the access_token was not generated correctly');
+//                 reject();
+//             }
+//         });
+//     });
+// };
+
+
 function requestToken() {
-    console.log('inside req tokens');
-    return new Promise((resolve, reject) => {
+        console.log('inside req tokens');
         request(TokenOptions, function (error, response, body) {
 
             if (response.statusCode === 200) {
-                token = body.access_token;
-                console.log('----- 200 OK  token generated');
-                console.log('token =', token);
-                resolve(token)
+                access_token = body.access_token;
+                console.log('----- 200 OK  access_token generated');
+                console.log('access_token =', access_token);
+                return access_token;
             } else {
-                console.log('oops, the token was not generated correctly');
-                reject();
+                console.log('oops, the access_token was not generated correctly');
+                return;
             }
         });
+    };
+    
+
+exports.searchTrack = function (searchTerm) {        
+    
+    var operation = retry.operation({
+        retries:10,
+        minTimeout: 10 * 1000,
+        maxTimeout: 30 * 1000
+    });
+
+    operation.attempt(function(currentAttempt) {
+        requestTracks(searchTerm, access_token)
+            .then((data) =>{
+                console.log('Attempt:', currentAttempt);
+                return;
+            })
+            .catch(err => {
+                console.log('catch error', err);
+                console.log('Bttempt:', currentAttempt);
+                return;
+        })
+            
     });
 };
-
-
-function searchSpotify(searchTerm, token) {
-    var operation = retry.operation();
-    operation.attempt(function(currentAttempt) {
-        requestTracks(searchTerm, token).catch((err) => {
-          if (operation.retry(err)) {
-            return;            
-          }
-          operation.mainError();        
-        //   cb(err ? operation.mainError() : null, addresses);
-        });
-      };
-};
-
-
-

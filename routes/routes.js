@@ -4,6 +4,7 @@ const express = require('express');
 const request = require('request');
 const mongoose = require('mongoose');
 const path = require('path');
+const searchSpotify = require('../spotify');
 const {Playlist, Songs} = require('../models');
 
 const router = express.Router();
@@ -120,38 +121,39 @@ router.delete('/delete/:id', (req, res) => {
 
 
 
+router.get('/search_track', function (req, res) {
 
-
-router.get('/track', function (req, res) {
-
-  requestTracks()
-    .then(data => {
-      console.log('promise data', data);
-      if (data === 200) {
-        console.log('200');
-        return data;
-      } else {
-        console.log('req token');
-        return requestToken();
-      }
-    })
-    .then(data => {
-      if (data === 200) {
-        console.log('after', data);
-        return data;
-      } else {
-        console.log('req tracks');
-        requestTracks();
-      }
-    })
-    .catch(err => {
-      console.log('error: ', err);
-    }).then(
-      function(){
-        res.end();
-      }
-    );
-
+  searchSpotify.searchTrack('clocks');
+  
 });
 
 module.exports = router;
+
+
+// requestTracks()
+//   .then(data => {
+//     console.log('promise data', data);
+//     if (data === 200) {
+//       console.log('200');
+//       return data;
+//     } else {
+//       console.log('req token');
+//       return requestToken();
+//     }
+//   })
+//   .then(data => {
+//     if (data === 200) {
+//       console.log('after', data);
+//       return data;
+//     } else {
+//       console.log('req tracks');
+//       requestTracks();
+//     }
+//   })
+//   .catch(err => {
+//     console.log('error: ', err);
+//   }).then(
+//     function(){
+//       res.end();
+//     }
+//   );
