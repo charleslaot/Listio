@@ -4,31 +4,35 @@ const express = require('express');
 const request = require('request');
 const mongoose = require('mongoose');
 const path = require('path');
-const searchSpotify = require('../spotify');
+const spotify = require('../spotify');
 const {Playlist, Songs} = require('../models');
 
 const router = express.Router();
 mongoose.Promise = global.Promise;
 
 router.get('/', function (req, res) {
-  res.sendFile('home.html', {"root": './views'});
+  res.sendFile('home.html', {
+    "root": './views'
+  });
 });
 
 router.get('/login', function (req, res) {
-  res.sendFile('login.html', {"root": './views'});
+  res.sendFile('login.html', {
+    "root": './views'
+  });
 });
 
 router.get('/signup', function (req, res) {
-  res.sendFile('signup.html', {"root": './views'});
+  res.sendFile('signup.html', {
+    "root": './views'
+  });
 });
 
 router.get('/edit', function (req, res) {
-  res.sendFile('edit.html', {"root": './views'});
+  res.sendFile('edit.html', {
+    "root": './views'
+  });
 });
-
-
-
-
 
 
 router.post('/create', (req, res) => {
@@ -42,25 +46,23 @@ router.post('/create', (req, res) => {
       return res.status(400).send(message);
     }
   }
-  
+
   Playlist
     .create({
       title: req.body.title,
-      content: req.body.content      
+      content: req.body.content
     })
     .then(playlist => res.status(201).json(playlist.serialize()))
     .catch(err => {
       console.error(err);
-      res.status(500).json({error: 'Something went wrong'});
+      res.status(500).json({
+        error: 'Something went wrong'
+      });
     });
-    
+
 });
 
 
-
-
-
-  
 router.get('/read', (req, res) => {
   Playlist
     .find()
@@ -69,13 +71,11 @@ router.get('/read', (req, res) => {
     })
     .catch(err => {
       console.error(err);
-      res.status(500).json({ error: 'something went wrong' });
+      res.status(500).json({
+        error: 'something went wrong'
+      });
     });
 });
-
-
-
-
 
 
 router.put('/update/:id', (req, res) => {
@@ -93,67 +93,38 @@ router.put('/update/:id', (req, res) => {
   });
 
   Playlist
-    .findByIdAndUpdate(req.params.id, { $set: updated }, { new: true })
+    .findByIdAndUpdate(req.params.id, {
+      $set: updated
+    }, {
+      new: true
+    })
     .then(updatePlaylist => res.status(204).end())
-    .catch(err => res.status(500).json({ message: 'Something went wrong' }));
+    .catch(err => res.status(500).json({
+      message: 'Something went wrong'
+    }));
 });
-
-
-
-
-
 
 
 router.delete('/delete/:id', (req, res) => {
   Playlist
-  .findByIdAndRemove(req.params.id)
-  .then(() => {
-    res.status(204).json({message: 'success'});
-  })
-  .catch(err => {
-    console.error(err);
-    res.status(500).json({error: 'something went wrong'});
-  });
+    .findByIdAndRemove(req.params.id)
+    .then(() => {
+      res.status(204).json({
+        message: 'success'
+      });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'something went wrong'
+      });
+    });
 });
 
+router.get('/track/:track_name', function (req, res) {
 
+  spotify.searchTrack(req.params.track_name);
 
-
-
-
-router.get('/search_track', function (req, res) {
-
-  searchSpotify.searchTrack('clocks');
-  
 });
 
 module.exports = router;
-
-
-// requestTracks()
-//   .then(data => {
-//     console.log('promise data', data);
-//     if (data === 200) {
-//       console.log('200');
-//       return data;
-//     } else {
-//       console.log('req token');
-//       return requestToken();
-//     }
-//   })
-//   .then(data => {
-//     if (data === 200) {
-//       console.log('after', data);
-//       return data;
-//     } else {
-//       console.log('req tracks');
-//       requestTracks();
-//     }
-//   })
-//   .catch(err => {
-//     console.log('error: ', err);
-//   }).then(
-//     function(){
-//       res.end();
-//     }
-//   );

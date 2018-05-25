@@ -8,9 +8,8 @@ $('.js-form').submit(event => {
 
 function getTrackFromSpotify(searchTerm, callback) {
   const settings = {
-    url: 'localhost:8080/get_track',
-    data: {
-      q: `${searchTerm}`,
+    url: 'localhost:8080/track/clocks',
+    data: {      
       type: 'track'
     },
     dataType: 'json',
