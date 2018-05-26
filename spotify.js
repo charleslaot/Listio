@@ -1,8 +1,4 @@
-// authenticate - return access_token
-
-//{400 401 if bad access_token / 200 OK} search(searchTerm, access_token)
-
-const retry = require('retry');
+const promiseRetry = require('promise-retry');
 const request = require('request');
 const SPOTIFY_API_TOKEN_URL = 'https://accounts.spotify.com/api/token';
 const SPOTIFY_SEARCH_URL = "https://api.spotify.com/v1/search";
@@ -26,7 +22,7 @@ function getTrackOptions(searchTerm, access_token) {
     return trackOptions;
 };
 
-const TokenOptions = {
+const tokenOptions = {
     url: SPOTIFY_API_TOKEN_URL,
     method: 'POST',
     headers: {
@@ -38,17 +34,19 @@ const TokenOptions = {
     json: true
 };
 
-function requestTracks(searchTerm) {    
+function requestTracks(searchTerm) {
     return new Promise((resolve, reject) => {
         request(getTrackOptions(searchTerm, access_token), function (error, response, body) {
 
             if (response.statusCode === 200) {
-                console.log('200 OK tracks received');                
+                console.log('200 OK tracks received');
                 resolve(body);
             } else if ((JSON.parse(body).error.message === "The access access_token expired") ||
-                (response.statusCode === 400 || 401)) {
+                (response.statusCode === 400 || response.statusCode === 401)) { //refactor
                 console.log('Expired or empty access_token:', access_token);
-                reject(response.statusCode);
+                requestToken().then(function () {
+                    reject();
+                });
             } else {
                 console.log('oops, something went wrong');
                 reject(JSON.parse(body).error.message);
@@ -58,32 +56,34 @@ function requestTracks(searchTerm) {
 };
 
 function requestToken() {
-    request(TokenOptions, function (error, response, body) { 
-        if (response.statusCode === 200) {            
-            access_token = body.access_token;
-            console.log('access_token generated');
-            console.log('access_token =', access_token);            
-          } else {
-            console.log('oops, the token was not generated correctly');            
-          }
+    return new Promise((resolve, reject) => {
+        request(tokenOptions, function (error, response, body) {
+            if (response.statusCode === 200) {
+                access_token = body.access_token;
+                console.log('access_token generated');
+                console.log('access_token =', access_token);
+                resolve();
+            } else {
+                console.log('oops, the token was not generated correctly');
+                reject();
+            }
+        });
     });
 };
 
-function searchTrack(searchTerm) {    
-    
-    var operation = retry.operation();
+function searchTrack(searchTerm) {
 
-    operation.attempt(function (currentAttempt) {
-        requestTracks(searchTerm)
-            .then((result) => {
-                console.log('----- Success');  
-                console.log(result);
-                return result;
-            }).catch((err) => {                
-                requestToken();
-                operation.retry(err);
+    return promiseRetry(function (retry, number) {
+            console.log('attempt number', number);
+
+            return requestTracks(searchTerm)
+                .catch(retry);
+            })
+            .then(function (result) {
+                return JSON.parse(result);
+            }, function (err) {
+                // ..
             });
-    });
 };
 
 module.exports = {searchTrack};

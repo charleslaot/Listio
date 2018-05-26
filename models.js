@@ -18,18 +18,19 @@ playlistSchema.methods.serialize = function() {
   };
 };
 
-const songsSchema = mongoose.Schema({
-    songTitle: {type: String, required: true},
-    songArtist: {type: String, required: true},
-    songAlbum: {type: String, required: true},
-    releaseDate: {type: Date, required: true},
-    duration: {type: Number, required: true},
-    thumbnail: {type: String, required: true},
-    explicit: {type: Boolean, required: true},
-    preview: {type: String, required: true}    
-});
+// include in the playlist schema
+// const songsSchema = mongoose.Schema({
+//     songTitle: {type: String, required: true},
+//     songArtist: {type: String, required: true},
+//     songAlbum: {type: String, required: true},
+//     releaseDate: {type: Date, required: true},
+//     duration: {type: Number, required: true},
+//     thumbnail: {type: String, required: true},
+//     explicit: {type: Boolean, required: true},
+//     preview: {type: String, required: true}    
+// });
+// encodeURIComponent('nothing else matters')
 
 const Playlist = mongoose.model('Playlist', playlistSchema);
-const Songs = mongoose.model('Songs', songsSchema);
 
-module.exports = {Playlist, Songs};
+module.exports = {Playlist};

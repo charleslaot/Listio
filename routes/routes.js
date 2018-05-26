@@ -5,7 +5,10 @@ const request = require('request');
 const mongoose = require('mongoose');
 const path = require('path');
 const spotify = require('../spotify');
-const {Playlist, Songs} = require('../models');
+const {
+  Playlist,
+  Songs
+} = require('../models');
 
 const router = express.Router();
 mongoose.Promise = global.Promise;
@@ -122,8 +125,10 @@ router.delete('/delete/:id', (req, res) => {
 });
 
 router.get('/track/:track_name', function (req, res) {
-
-  spotify.searchTrack(req.params.track_name);
+  spotify.searchTrack(req.params.track_name)
+    .then(function (data) {
+      res.json(data);
+    });
 
 });
 
