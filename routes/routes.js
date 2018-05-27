@@ -35,8 +35,7 @@ router.get('/edit', function (req, res) {
 });
 
 
-router.post('/create', (req, res) => {
-  console.log('REQ BODY', req.body);
+router.post('/create', (req, res) => {  
   const requiredFields = ["title", "content"];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
@@ -50,7 +49,8 @@ router.post('/create', (req, res) => {
   Playlist
     .create({
       title: req.body.title,
-      content: req.body.content
+      content: req.body.content,
+      created: req.body.created
     })
     .then(playlist => res.status(201).json(playlist.serialize()))
     .catch(err => {

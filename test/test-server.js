@@ -24,7 +24,7 @@ const expect = chai.expect;
 chai.use(chaiHttp);
 
 // Testing the client page render
-// testClientRender();
+testClientRender();
 
 function seedPlaylistData() {
     console.info('seeding playlist data');
@@ -128,6 +128,48 @@ describe('Playlist API resource', function () {
         });
 
     });
+
+    describe('POST playlist endpoint', function() {
+      
+        it('should add a new playlist', function() {
+    
+          const newPlaylist = generatePlaylistData();      
+    
+          return chai.request(app)
+            .post('/create')
+            .send(newPlaylist)
+            .then(function(res) {
+              expect(res).to.have.status(201);
+              expect(res).to.be.json;
+              expect(res.body).to.be.a('object');
+              expect(res.body.id).to.not.be.null;                 
+              expect(res.body).to.include.keys('title', 'content', 'created');
+              expect(res.body.title).to.equal(newPlaylist.title);          
+              expect(res.body.content.songTitle).to.equal(newPlaylist.content.songTitle);
+              expect(res.body.content.songArtist).to.equal(newPlaylist.content.songArtist);
+              expect(res.body.content.songAlbum).to.equal(newPlaylist.content.songAlbum);
+              expect(res.body.content.releaseDate).to.equal(newPlaylist.content.releaseDate.toISOString());
+              expect(res.body.content.duration).to.equal(newPlaylist.content.duration);
+              expect(res.body.content.thumbnail).to.equal(newPlaylist.content.thumbnail);
+              expect(res.body.content.explicit).to.equal(newPlaylist.content.explicit);
+              expect(res.body.content.preview).to.equal(newPlaylist.content.preview);              
+              expect(res.body.created).to.equal(newPlaylist.created.toISOString());                    
+              return Playlist.findById(res.body.id);
+            })
+            .then(function(playlist) {
+                expect(newPlaylist.title).to.equal(playlist.title);                   
+                expect(newPlaylist.content.songTitle).to.equal(playlist.content.songTitle);
+                expect(newPlaylist.content.songArtist).to.equal(playlist.content.songArtist);
+                expect(newPlaylist.content.songAlbum).to.equal(playlist.content.songAlbum);
+                expect(newPlaylist.content.releaseDate).to.deep.equal(playlist.content.releaseDate);
+                expect(newPlaylist.content.duration).to.equal(playlist.content.duration);
+                expect(newPlaylist.content.thumbnail).to.equal(playlist.content.thumbnail);
+                expect(newPlaylist.content.explicit).to.equal(playlist.content.explicit);
+                expect(newPlaylist.content.preview).to.equal(playlist.content.preview);                           
+                expect(newPlaylist.created).to.deep.equal(playlist.created);    
+            });
+        });
+      });
 
 
 });
