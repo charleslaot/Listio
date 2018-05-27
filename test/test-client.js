@@ -1,23 +1,16 @@
 'use strict'
 
 const chai = require('chai');
+const {app} = require('../server');
 const chaiHttp = require('chai-http');
 const {TEST_DATABASE_URL} = require('../config');
-const {app, runServer, closeServer} = require('../server');
 
 const expect = chai.expect;
 
 chai.use(chaiHttp);
 
 function testClientRender() {  
-    describe('App render endpoints', function () {
-        before(function () {
-            return runServer(TEST_DATABASE_URL);
-        });
-
-        after(function () {
-            return closeServer();
-        });
+    describe('App render endpoints', function () {        
 
         it('home page should return status 200', function () {
             return chai.request(app)
