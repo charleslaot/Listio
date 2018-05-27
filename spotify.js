@@ -1,3 +1,5 @@
+'use strict'
+
 const promiseRetry = require('promise-retry');
 const request = require('request');
 const SPOTIFY_API_TOKEN_URL = 'https://accounts.spotify.com/api/token';

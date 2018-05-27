@@ -1,14 +1,11 @@
 'use strict'
 
+const path = require('path');
 const express = require('express');
 const request = require('request');
 const mongoose = require('mongoose');
-const path = require('path');
 const spotify = require('../spotify');
-const {
-  Playlist,
-  Songs
-} = require('../models');
+const {Playlist} = require('../models');
 
 const router = express.Router();
 mongoose.Promise = global.Promise;

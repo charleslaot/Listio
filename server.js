@@ -1,22 +1,29 @@
 'use strict'
 
-const express = require('express');
-const morgan = require('morgan');
 const path = require('path');
+const morgan = require('morgan');
+const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const routes = require('./routes/routes');
 
 const app = express();
-const {DATABASE_URL, PORT} = require('./config');
+const {
+    DATABASE_URL,
+    PORT
+} = require('./config');
 mongoose.Promise = global.Promise;
 
 app.set('view engine', 'html');
 app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.raw({ extended: false }));
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.raw({
+    extended: false
+}));
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 app.use(bodyParser.json());
 app.use(morgan('common'));
 app.use(routes);
@@ -69,4 +76,4 @@ if (require.main === module) {
     runServer(DATABASE_URL).catch(err => console.error(err));
 }
 
-module.exports = {runServer, app,closeServer};
+module.exports = {runServer, app, closeServer};
