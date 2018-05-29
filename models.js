@@ -6,16 +6,16 @@ mongoose.Promise = global.Promise;
 const playlistSchema = mongoose.Schema({
   title: {type: String, required: true},  
   content: {
-    songTitle: {type: String, required: true},
-    songArtist: {type: String, required: true},
-    songAlbum: {type: String, required: true},
-    releaseDate: {type: Date, required: true},
-    duration: {type: Number, required: true},
-    thumbnail: {type: String, required: true},
-    explicit: {type: Boolean, required: true},
-    preview: {type: String, required: true}    
+    songTitle: {type: String},
+    songArtist: {type: String},
+    songAlbum: {type: String},
+    releaseDate: {type: Date},
+    duration: {type: Number},
+    thumbnail: {type: String},
+    explicit: {type: Boolean},
+    preview: {type: String}    
   },
-  created: {type: Date, default: Date.now}
+  created: {type: Date, default: Date.now, required: true}
 });
 
 playlistSchema.methods.serialize = function() {

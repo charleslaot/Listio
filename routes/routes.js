@@ -36,7 +36,7 @@ router.get('/edit', function (req, res) {
 
 
 router.post('/create', (req, res) => {  
-  const requiredFields = ["title", "content"];
+  const requiredFields = ["title"];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(req.body) || !(field in req.body)) {
@@ -48,9 +48,7 @@ router.post('/create', (req, res) => {
 
   Playlist
     .create({
-      title: req.body.title,
-      content: req.body.content,
-      created: req.body.created
+      title: req.body.title      
     })
     .then(playlist => res.status(201).json(playlist.serialize()))
     .catch(err => {
@@ -75,6 +73,18 @@ router.get('/read', (req, res) => {
         error: 'something went wrong'
       });
     });
+});
+
+router.get('/edit/:name', (req, res) => {
+  Playlist
+  .findOne({title : req.params.name})
+  .then(playlist => {
+    res.json(playlist.serialize()
+  )})
+  .catch(err => {
+    console.error(err);
+    res.status(500).json({error: 'something went horribly wrong'});
+  });
 });
 
 
