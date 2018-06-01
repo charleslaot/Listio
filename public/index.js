@@ -1,6 +1,6 @@
 'use strict'
 
-const PLAYLIST_URI = 'http://https://nameless-springs-69015.herokuapp.com/playlist/';
+const PLAYLIST_URI = 'https://nameless-springs-69015.herokuapp.com/playlist/';
 
 // Dev channel
 // const PLAYLIST_URI = 'http://localhost:8080/playlist/';
