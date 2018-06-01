@@ -11,15 +11,8 @@ $('.js-addPlaylistForm').submit(event => {
   let playlistName = $(event.currentTarget).find('.js-newPlaylistName').val();
   $('.js-newPlaylistName').val('');
   createPlaylist(playlistName)
-    .then(getAllPlaylist)
-    .then(displayAllPlaylist);
-});
-
-// Show/edit playlist handler
-$('.js-all-playlists').on('click', '.js-itemPlaylist', function (playlistName) {
-
-  getOnePlaylist(playlistName)
-    .then(displayOnePlaylist);
+    .then(getPlaylists)
+    .then(displayPlaylists);
 });
 
 // Create playlist
@@ -35,15 +28,12 @@ function createPlaylist(listName) {
       contentType: 'application/json; charset=utf-8',
     };
     $.ajax(settings);
-
-    // *** add error handler here ***
-
     resolve();
   });
 };
 
 // Get all playlists
-function getAllPlaylist() {
+function getPlaylists() {
   return new Promise((resolve, reject) => {
     const settings = {
       url: PLAYLIST_URI,
@@ -57,7 +47,7 @@ function getAllPlaylist() {
 };
 
 // Render functions
-function displayAllPlaylist(data) {
+function displayPlaylists(data) {
   return new Promise((resolve, reject) => {
     let results = data.map((item) => renderAllPlaylists(item)).reverse();
     $('.js-all-playlists').html(results);
@@ -77,8 +67,8 @@ function renderAllPlaylists(playlist) {
 
 // When page loads handler
 function onPageLoad() {
-  getAllPlaylist()
-    .then(displayAllPlaylist);
+  getPlaylists()
+    .then(displayPlaylists);
 }
 
 $(onPageLoad());
