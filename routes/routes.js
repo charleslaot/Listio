@@ -142,11 +142,23 @@ router.get('/track/:title', function (req, res) {
 });
 
 // Insert track in playlist
-router.post('/track', function (req, res) {
-  
-
-});
+router.post('/playlist/:id/track', function (req, res) {
+  let id = req.params.id;
+  let track = req.body.content;  
+  Playlist
+    .findByIdAndUpdate(id, {
+      $push: {content: track}
+    })
+    .then(
+      res.end()
+    );
+  });   
 
 // Delete track from playlist
+
+
+
+
+
 
 module.exports = router;

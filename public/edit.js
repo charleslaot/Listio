@@ -20,6 +20,7 @@ function getOnePlaylist(playlist) {
     });
 };
 
+// Render functions
 function displayOnePlaylist(data) {
     return new Promise((resolve, reject) => {
         console.log(data);
