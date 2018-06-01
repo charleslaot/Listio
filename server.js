@@ -8,10 +8,7 @@ const bodyParser = require('body-parser');
 const routes = require('./routes/routes');
 
 const app = express();
-const {
-    DATABASE_URL,
-    PORT
-} = require('./config');
+const {DATABASE_URL, PORT} = require('./config');
 mongoose.Promise = global.Promise;
 
 app.set('view engine', 'html');

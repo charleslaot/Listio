@@ -1,6 +1,9 @@
 'use strict'
 
-const PLAYLIST_URI = 'http://localhost:8080/playlist/';
+const PLAYLIST_URI = 'http://https://nameless-springs-69015.herokuapp.com/playlist/';
+
+// Dev channel
+// const PLAYLIST_URI = 'http://localhost:8080/playlist/';
 
 // Create playlist handler
 $('.js-createPlaylistForm').submit(event => {

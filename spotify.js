@@ -7,9 +7,6 @@ const SPOTIFY_SEARCH_URL = "https://api.spotify.com/v1/search";
 const clientID = process.env.CLIENT_ID;
 const clientSECRET = process.env.CLIENT_SECRET;
 var access_token = '';
-// DELETE WHEN TESTED !!!
-// const clientID = '1ee741ccb75d4d068181e7ec60222852';
-// const clientSECRET = '57bf8033f6284c62b63ff98d1a2eea4f';
 
 function getTrackOptions(searchTerm, access_token) {
     const trackOptions = {
