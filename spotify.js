@@ -4,9 +4,12 @@ const promiseRetry = require('promise-retry');
 const request = require('request');
 const SPOTIFY_API_TOKEN_URL = 'https://accounts.spotify.com/api/token';
 const SPOTIFY_SEARCH_URL = "https://api.spotify.com/v1/search";
-const clientID = '1ee741ccb75d4d068181e7ec60222852';
-const clientSECRET = '57bf8033f6284c62b63ff98d1a2eea4f';
+const clientID = process.env.CLIENT_ID;
+const clientSECRET = process.env.CLIENT_SECRET;
 var access_token = '';
+// DELETE WHEN TESTED !!!
+// const clientID = '1ee741ccb75d4d068181e7ec60222852';
+// const clientSECRET = '57bf8033f6284c62b63ff98d1a2eea4f';
 
 function getTrackOptions(searchTerm, access_token) {
     const trackOptions = {
@@ -43,7 +46,7 @@ function requestTracks(searchTerm) {
             if (response.statusCode === 200) {
                 console.log('200 OK tracks received');
                 resolve(body);
-            } else if ((JSON.parse(body).error.message === "The access access_token expired") ||
+            } else if ((JSON.parse(body).error.message === "The access_token expired") ||
                 (response.statusCode === 400 || response.statusCode === 401)) { //refactor
                 console.log('Expired or empty access_token:', access_token);
                 requestToken().then(function () {
@@ -66,7 +69,7 @@ function requestToken() {
                 console.log('access_token =', access_token);
                 resolve();
             } else {
-                console.log('oops, the token was not generated correctly');
+                console.log('oops, the access_token was not generated correctly');
                 reject();
             }
         });

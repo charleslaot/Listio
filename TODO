@@ -3,3 +3,10 @@
 //test read/:name endpoint
 
 //check for repeated playlists names
+
+
+
+DONE --- cleanup url names (POST /playlist, GET /playlist/id)
+we already setup env variables for CLIENT_*, also set up heroku variables
+cleanup model
+Make front end like Mr Books setup (DATA = {}, separate render from data fetch logic)

@@ -35,7 +35,7 @@ router.get('/edit', function (req, res) {
 });
 
 
-router.post('/create', (req, res) => {  
+router.post('/playlist', (req, res) => {  
   const requiredFields = ["title"];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
@@ -61,7 +61,7 @@ router.post('/create', (req, res) => {
 });
 
 
-router.get('/read', (req, res) => {
+router.get('/playlist', (req, res) => {
   Playlist
     .find()
     .then(playlists => {
@@ -75,7 +75,7 @@ router.get('/read', (req, res) => {
     });
 });
 
-router.get('/edit/:name', (req, res) => {
+router.get('/playlist/:name', (req, res) => {
   Playlist
   .findOne({title : req.params.name})
   .then(playlist => {
@@ -88,7 +88,7 @@ router.get('/edit/:name', (req, res) => {
 });
 
 
-router.put('/update/:id', (req, res) => {
+router.put('/playlist/:id', (req, res) => {
   if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
     res.status(400).json({
       error: 'Request path id and request body id values must match'
@@ -115,7 +115,7 @@ router.put('/update/:id', (req, res) => {
 });
 
 
-router.delete('/delete/:id', (req, res) => {
+router.delete('/playlist/:id', (req, res) => {
   Playlist
     .findByIdAndRemove(req.params.id)
     .then(() => {
@@ -131,7 +131,7 @@ router.delete('/delete/:id', (req, res) => {
     });
 });
 
-router.get('/track/:track_name', function (req, res) {
+router.get('/track/:title', function (req, res) {
   spotify.searchTrack(req.params.track_name)
     .then(function (data) {
       res.json(data);

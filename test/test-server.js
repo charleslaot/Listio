@@ -6,13 +6,11 @@ const mongoose = require('mongoose');
 const chaiHttp = require('chai-http');
 const {Playlist} = require('../models');
 const {TEST_DATABASE_URL} = require('../config');
-const {testClientRender} = require('./test-client');
 const {app, runServer, closeServer} = require('../server');
 
 const expect = chai.expect;
 
 chai.use(chaiHttp);
-
 
 function seedPlaylistData() {
     console.info('seeding playlist data');
@@ -62,11 +60,8 @@ describe('Playlist API resource', function () {
     
     after(function () {
         return closeServer();
-    });
-    
-    // Testing the client page render
-    testClientRender();
-    
+    });   
+      
     describe('GET playlist endpoint', function () {
         
         it('should return all existing playlists', function () {
@@ -74,7 +69,7 @@ describe('Playlist API resource', function () {
             let res;
             
             return chai.request(app)
-            .get('/read')
+            .get('/playlist')
             .then(function (_res) {
                     res = _res;
                     expect(res).to.have.status(200);
@@ -92,7 +87,7 @@ describe('Playlist API resource', function () {
             let resPlaylist;
 
             return chai.request(app)
-                .get('/read')
+                .get('/playlist')
                 .then(function (res) {
                     expect(res).to.have.status(200);
                     expect(res).to.be.json;
@@ -130,7 +125,7 @@ describe('Playlist API resource', function () {
             const newPlaylist = generatePlaylistData();
 
             return chai.request(app)
-                .post('/create')
+                .post('/playlist')
                 .send(newPlaylist)
                 .then(function (res) {
                     expect(res).to.have.status(201);
@@ -171,7 +166,7 @@ describe('Playlist API resource', function () {
                     updateData.id = playlist.id;
 
                     return chai.request(app)
-                        .put(`/update/${playlist.id}`)
+                        .put(`/playlist/${playlist.id}`)
                         .send(updateData);
                 })
                 .then(function (res) {
@@ -196,7 +191,7 @@ describe('Playlist API resource', function () {
                 .findOne()
                 .then(function (_playlist) {
                     playlist = _playlist;
-                    return chai.request(app).delete(`/delete/${playlist.id}`);
+                    return chai.request(app).delete(`/playlist/${playlist.id}`);
                 })
                 .then(function (res) {
                     expect(res).to.have.status(204);

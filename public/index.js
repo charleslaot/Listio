@@ -1,10 +1,8 @@
 'use strict'
 
-const CREATE_PLAYLIST_URI = 'http://localhost:8080/create/';
-const GET_PLAYLIST_URI = 'http://localhost:8080/read/';
-const EDIT_PLAYLIST_URI = 'http://localhost:8080/edit/';
+const PLAYLIST_URI = 'http://localhost:8080/playlist/';
 
-// Create a playlist
+// Create playlist handler
 $('.js-createPlaylistForm').submit(event => {
   event.preventDefault();
   let playlistName = $(event.currentTarget).find('.js-newPlaylistName').val();
@@ -13,76 +11,76 @@ $('.js-createPlaylistForm').submit(event => {
     .then(displayAllPlaylist);
 });
 
-// Show/edit a playlist
-$('.js-all-playlists').on('click', '.js-itemPlaylist', function(playlistName) {
+// Show/edit playlist handler
+$('.js-all-playlists').on('click', '.js-itemPlaylist', function (playlistName) {
   getOnePlaylist(playlistName)
-    .then(displayOnePlaylist);      
-  });  
+    .then(displayOnePlaylist);
+});
 
-
-function getOnePlaylist(playlist){
+// Create playlist
+function createPlaylist(listName) {
   return new Promise((resolve, reject) => {
-      var playlistURL = EDIT_PLAYLIST_URI + playlist.target.textContent;        
-      const settings = {
-        url: playlistURL,    
-        dataType: 'json',
-        type: 'GET',
-        contentType: 'application/json; charset=utf-8',    
-      };    
-      resolve($.ajax(settings));     
-    });
-  };  
-
-function createPlaylist(listName) {  
-  return new Promise((resolve, reject) => {    
     const settings = {
-      url: CREATE_PLAYLIST_URI,
-      data: JSON.stringify({title: listName}),
+      url: PLAYLIST_URI,
+      data: JSON.stringify({
+        title: listName
+      }),
       dataType: 'json',
       type: 'POST',
-      contentType: 'application/json; charset=utf-8',    
-    };    
-    $.ajax(settings);     
+      contentType: 'application/json; charset=utf-8',
+    };
+    $.ajax(settings);
+
+    // *** add error handler here ***
+
     resolve();
-  });  
+  });
 };
 
+// Get all playlists
 function getAllPlaylist() {
   return new Promise((resolve, reject) => {
     const settings = {
-      url: GET_PLAYLIST_URI,    
+      url: PLAYLIST_URI,
       dataType: 'json',
       type: 'GET',
-      contentType: 'application/json; charset=utf-8',    
+      contentType: 'application/json; charset=utf-8',
     };
-    let results = $.ajax(settings);            
+    let results = $.ajax(settings);
     resolve(results)
-  });    
+  });
 };
 
-function displayAllPlaylist(data) {        
-    return new Promise((resolve, reject) => {    
-      let results = data.map((item) => renderAllPlaylists(item)).reverse();
-      $('.js-all-playlists').html(results);
-      resolve();
-  });    
+// Get one playlist
+function getOnePlaylist(playlist) {
+  return new Promise((resolve, reject) => {
+    var playlistURL = PLAYLIST_URI + playlist.target.textContent;
+    const settings = {
+      url: playlistURL,
+      dataType: 'json',
+      type: 'GET',
+      contentType: 'application/json; charset=utf-8',
+    };
+    let results = $.ajax(settings);
+    resolve(results)
+  });
 };
 
-function displayOnePlaylist(data) {     
-  return new Promise((resolve, reject) => {    
+// Render functions
+function displayAllPlaylist(data) {
+  return new Promise((resolve, reject) => {
+    let results = data.map((item) => renderAllPlaylists(item)).reverse();
+    $('.js-all-playlists').html(results);
+    resolve();
+  });
+};
+
+function displayOnePlaylist(data) {
+  return new Promise((resolve, reject) => {
     let results = renderOnePlaylists(data);
     $('.js-one-playlists').html(results);
     resolve();
-  });    
-};
-
-function renderOnePlaylists(playlist) {  
-  return `      
-      <div>                         
-        <p>Title: <span class="itemPlaylist js-itemPlaylist">${playlist.title}</span></p>                
-        <p>Created: ${playlist.created}</p>                        
-      </div>
-    `;
+  });
 };
 
 function renderAllPlaylists(playlist) {
@@ -95,7 +93,16 @@ function renderAllPlaylists(playlist) {
     `;
 };
 
-function renderSongs(result) {
+function renderOnePlaylists(playlist) {
+  return `      
+      <div>                         
+        <p>Title: <span class="itemPlaylist js-itemPlaylist">${playlist.title}</span></p>                
+        <p>Created: ${playlist.created}</p>                        
+      </div>
+    `;
+};
+
+function renderTracks(result) {
   return `
       <br>      
       <div>                 
@@ -107,10 +114,10 @@ function renderSongs(result) {
     `;
 };
 
+// When page loads
 function onPageLoad() {
   getAllPlaylist()
     .then(displayAllPlaylist);
-  
 }
 
 $(onPageLoad());
