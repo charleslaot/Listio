@@ -5,7 +5,7 @@ mongoose.Promise = global.Promise;
 
 const playlistSchema = mongoose.Schema({
   title: {type: String, required: true},  
-  content: {
+  content: [{
     songTitle: {type: String},
     songArtist: {type: String},
     songAlbum: {type: String},
@@ -13,9 +13,15 @@ const playlistSchema = mongoose.Schema({
     duration: {type: Number},
     thumbnail: {type: String},
     explicit: {type: Boolean},
-    preview: {type: String}    
-  },
+    preview: {type: String},
+    popularity: {type: Number}    
+  }],
   created: {type: Date, default: Date.now, required: true}
+});
+
+playlistSchema.virtual('addTrack').get(function(track) {
+  this.content.push(track);
+  
 });
 
 playlistSchema.methods.serialize = function() {

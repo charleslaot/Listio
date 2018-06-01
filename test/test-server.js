@@ -13,29 +13,42 @@ const expect = chai.expect;
 chai.use(chaiHttp);
 
 function seedPlaylistData() {
-    console.info('seeding playlist data');
-    const seedData = [];
-    
+    console.info('seeding playlist data');   
+
+    const seedPlaylists = [];
+            
     for (let i = 1; i <= 10; i++) {
-        seedData.push(generatePlaylistData());
-    }
-    return Playlist.insertMany(seedData);
+
+        let seedTrackData = [];
+    
+        for (let i = 1; i <= 5; i++) {
+            seedTrackData.push(generateTrackData()); 
+        }        
+    
+        seedPlaylists.push(generatePlaylistData(seedTrackData));        
+    }    
+    return Playlist.insertMany(seedPlaylists);
 }
 
-function generatePlaylistData() {
+function generatePlaylistData(seedTrack) {
     return {
         title: faker.random.words(),
-        content: {
-            songTitle: faker.random.words(),
-            songArtist: faker.name.firstName(),
-            songAlbum: faker.random.words(),
-            releaseDate: faker.date.past(),
-            duration: faker.random.number(),
-            thumbnail: faker.random.image(),
-            explicit: faker.random.boolean(),
-            preview: faker.internet.url()
-        },
+        content: seedTrack,
         created: faker.date.past()
+    }
+}
+
+function generateTrackData(){     
+    return {        
+        songTitle: faker.random.words(),
+        songArtist: faker.name.firstName(),
+        songAlbum: faker.random.words(),
+        releaseDate: faker.date.past(),
+        duration: faker.random.number(),
+        thumbnail: faker.random.image(),
+        explicit: faker.random.boolean(),
+        preview: faker.internet.url(),
+        popularity: faker.random.number()    
     }
 }
 
@@ -103,15 +116,18 @@ describe('Playlist API resource', function () {
                     return Playlist.findById(resPlaylist.id);
                 })
                 .then(function (playlist) {
-                    expect(resPlaylist.title).to.equal(playlist.title);
-                    expect(resPlaylist.content.songTitle).to.equal(playlist.content.songTitle);
-                    expect(resPlaylist.content.songArtist).to.equal(playlist.content.songArtist);
-                    expect(resPlaylist.content.songAlbum).to.equal(playlist.content.songAlbum);
-                    expect(resPlaylist.content.releaseDate).to.equal(playlist.content.releaseDate.toISOString());
-                    expect(resPlaylist.content.duration).to.equal(playlist.content.duration);
-                    expect(resPlaylist.content.thumbnail).to.equal(playlist.content.thumbnail);
-                    expect(resPlaylist.content.explicit).to.equal(playlist.content.explicit);
-                    expect(resPlaylist.content.preview).to.equal(playlist.content.preview);
+                    expect(resPlaylist.title).to.equal(playlist.title);                    
+                    for (let i = 0; i < playlist.content.length; i++) {                        
+                        expect(resPlaylist.content[i].songTitle).to.equal(playlist.content[i].songTitle);
+                        expect(resPlaylist.content[i].songArtist).to.equal(playlist.content[i].songArtist);
+                        expect(resPlaylist.content[i].songAlbum).to.equal(playlist.content[i].songAlbum);
+                        expect(resPlaylist.content[i].releaseDate).to.equal(playlist.content[i].releaseDate.toISOString());
+                        expect(resPlaylist.content[i].duration).to.equal(playlist.content[i].duration);
+                        expect(resPlaylist.content[i].thumbnail).to.equal(playlist.content[i].thumbnail);
+                        expect(resPlaylist.content[i].explicit).to.equal(playlist.content[i].explicit);
+                        expect(resPlaylist.content[i].preview).to.equal(playlist.content[i].preview);
+                        expect(resPlaylist.content[i].popularity).to.equal(playlist.content[i].popularity);
+                    }
                     expect(resPlaylist.created).to.equal(playlist.created.toISOString());
                 });
         });
@@ -136,7 +152,7 @@ describe('Playlist API resource', function () {
                     expect(res.body.title).to.equal(newPlaylist.title);                                        
                     return Playlist.findById(res.body.id);
                 })
-                .then(function (playlist) {
+                .then(function (playlist) {                                        
                     expect(newPlaylist.title).to.equal(playlist.title);                                        
                 });
         });
@@ -146,18 +162,7 @@ describe('Playlist API resource', function () {
 
         it('should update fields you send over', function () {
             const updateData = {
-                title: faker.random.words(),
-                content: {
-                    songTitle: faker.random.words(),
-                    songArtist: faker.name.firstName(),
-                    songAlbum: faker.random.words(),
-                    releaseDate: faker.date.past(),
-                    duration: faker.random.number(),
-                    thumbnail: faker.random.image(),
-                    explicit: faker.random.boolean(),
-                    preview: faker.internet.url()
-                },
-                created: faker.date.past()
+                title: faker.random.words(),                                
             };
 
             return Playlist

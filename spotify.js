@@ -1,13 +1,14 @@
 'use strict'
 
-const promiseRetry = require('promise-retry');
+var access_token = '';
 const request = require('request');
-const SPOTIFY_API_TOKEN_URL = 'https://accounts.spotify.com/api/token';
-const SPOTIFY_SEARCH_URL = "https://api.spotify.com/v1/search";
 const clientID = process.env.CLIENT_ID;
 const clientSECRET = process.env.CLIENT_SECRET;
-var access_token = '';
+const promiseRetry = require('promise-retry');
+const SPOTIFY_SEARCH_URL = "https://api.spotify.com/v1/search";
+const SPOTIFY_API_TOKEN_URL = 'https://accounts.spotify.com/api/token';
 
+// Request options
 function getTrackOptions(searchTerm, access_token) {
     const trackOptions = {
         url: SPOTIFY_SEARCH_URL,
@@ -36,6 +37,7 @@ const tokenOptions = {
     json: true
 };
 
+// Request tracks from Spotify
 function requestTracks(searchTerm) {
     return new Promise((resolve, reject) => {
         request(getTrackOptions(searchTerm, access_token), function (error, response, body) {
@@ -57,6 +59,7 @@ function requestTracks(searchTerm) {
     });
 };
 
+// Request access token from Spotify
 function requestToken() {
     return new Promise((resolve, reject) => {
         request(tokenOptions, function (error, response, body) {
@@ -73,16 +76,36 @@ function requestToken() {
     });
 };
 
-function searchTrack(searchTerm) {
+// Normalize track data
+function normalizeTracks(trackItem){  
+    let track = {
+        songTitle: trackItem.name,
+        songArtist: trackItem.artists[0].name,
+        songAlbum: trackItem.album.name,
+        releaseDate: trackItem.album.release_date,
+        duration: trackItem.duration_ms,
+        thumbnail: trackItem.album.images[1].url, 
+        explicit: trackItem.explicit, 
+        preview: trackItem.preview_url,
+        popularity: trackItem.popularity
+    }        
+    return track;
+};
 
+
+// Handler for search tracks
+function searchTrack(searchTerm) {
     return promiseRetry(function (retry, number) {
             console.log('attempt number', number);
-
             return requestTracks(searchTerm)
                 .catch(retry);
             })
             .then(function (result) {
-                return JSON.parse(result);
+                let data = JSON.parse(result);                
+                let tracks = data.tracks.items.map(item => {                                        
+                    return normalizeTracks(item);                   
+                });
+                return tracks;
             }, function (err) {
                 // ..
             });

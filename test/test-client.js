@@ -36,7 +36,7 @@ describe('App render endpoints', function () {
 
     it('edit page should return status 200', function () {
         return chai.request(app)
-            .get('/edit')
+            .get('/edit/:name')
             .then(function (response) {
                 expect(response).to.have.status(200);
             });
