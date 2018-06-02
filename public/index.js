@@ -1,9 +1,9 @@
 'use strict'
 
-// const PLAYLIST_URI = 'https://nameless-springs-69015.herokuapp.com/playlist/';
+const PLAYLIST_URI = 'https://nameless-springs-69015.herokuapp.com/playlist/';
 
 // Dev channel
-const PLAYLIST_URI = 'http://localhost:8080/playlist/';
+// const PLAYLIST_URI = 'http://localhost:8080/playlist/';
 
 // Create playlist handler
 $('.js-addPlaylistForm').submit(event => {
