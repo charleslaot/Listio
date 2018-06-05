@@ -6,7 +6,11 @@
 
 
 
-DONE --- cleanup url names (POST /playlist, GET /playlist/id)
-DONE --- we already setup env variables for CLIENT_*, also set up heroku variables
-DONE ----- cleanup model
-M front end like Mr Books setup (DATA = {}, separate render from data fetch logic)
+
+
+finish playlist edit page
+account creation/login w/ passport
+
+for friday:
+style documentation
+documentation jsdoc 

@@ -1,12 +1,12 @@
 'use strict'
 
-const PLAYLIST_URI = 'https://nameless-springs-69015.herokuapp.com/playlist/';
+// const PLAYLIST_URI = 'https://nameless-springs-69015.herokuapp.com/playlist/';
 
 // Dev channel
-// const PLAYLIST_URI = 'http://localhost:8080/playlist/';
+const PLAYLIST_URI = 'http://localhost:8080/playlist/';
 
-// Create playlist handler
-$('.js-addPlaylistForm').submit(event => {
+// Playlist handler
+$('.js-PlaylistForm').submit(event => {
   event.preventDefault();
   let playlistName = $(event.currentTarget).find('.js-newPlaylistName').val();
   $('.js-newPlaylistName').val('');
@@ -49,17 +49,17 @@ function getPlaylists() {
 // Render functions
 function displayPlaylists(data) {
   return new Promise((resolve, reject) => {
-    let results = data.map((item) => renderAllPlaylists(item)).reverse();
+    let results = data.map((item) => renderPlaylists(item)).reverse();
     $('.js-all-playlists').html(results);
     resolve();
   });
 };
 
-function renderAllPlaylists(playlist) {
+function renderPlaylists(playlist) {
   return `
       <br>      
       <div>                         
-        <p>Title: <a href="/edit/${playlist.title}"><span class="itemPlaylist js-itemPlaylist">${playlist.title}</span></p></a>
+        <p>Title: <a href="/playlist/${playlist.id}"><span class="itemPlaylist js-itemPlaylist">${playlist.title}</span></p></a>
         <p>Created: ${playlist.created}</p>                        
       </div>
     `;

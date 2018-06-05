@@ -77,14 +77,15 @@ function requestToken() {
 };
 
 // Normalize track data
-function normalizeTracks(trackItem){  
+function normalizeTracks(trackItem){      
     let track = {
+        songId: trackItem.id,
         songTitle: trackItem.name,
         songArtist: trackItem.artists[0].name,
         songAlbum: trackItem.album.name,
         releaseDate: trackItem.album.release_date,
         duration: trackItem.duration_ms,
-        thumbnail: trackItem.album.images[1].url, 
+        thumbnail: trackItem.album.images[2].url, 
         explicit: trackItem.explicit, 
         preview: trackItem.preview_url,
         popularity: trackItem.popularity

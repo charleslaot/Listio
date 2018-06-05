@@ -4,7 +4,9 @@ const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const spotify = require('../spotify');
-const {Playlist} = require('../models');
+const {
+  Playlist
+} = require('../models');
 
 mongoose.Promise = global.Promise;
 
@@ -27,14 +29,16 @@ router.get('/signup', function (req, res) {
   });
 });
 
-router.get('/edit/:name', function (req, res) {
+router.get('/playlist/:id', function (req, res) {
   res.sendFile('edit.html', {
     "root": './views'
   });
 });
 
+// Playlist endpoints
+
 // Create playlist
-router.post('/playlist', (req, res) => {  
+router.post('/playlist', (req, res) => {
   const requiredFields = ["title"];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
@@ -47,7 +51,7 @@ router.post('/playlist', (req, res) => {
 
   Playlist
     .create({
-      title: req.body.title      
+      title: req.body.title
     })
     .then(playlist => res.status(201).json(playlist.serialize()))
     .catch(err => {
@@ -74,19 +78,6 @@ router.get('/playlist', (req, res) => {
     });
 });
 
-// Retrieve one playlist
-router.get('/playlist/:name', (req, res) => {
-  Playlist
-  .findOne({title : req.params.name})
-  .then(playlist => {
-    console.log(playlist.serialize());
-    res.json(playlist.serialize())
-  })
-  .catch(err => {
-    console.error(err);
-    res.status(500).json({error: 'something went horribly wrong'});
-  });
-});
 
 // Update a playlist
 router.put('/playlist/:id', (req, res) => {
@@ -132,6 +123,27 @@ router.delete('/playlist/:id', (req, res) => {
     });
 });
 
+
+// Tracks endpoints
+
+// Retrieve playlist track list
+router.get('/playlist/:id/tracks', (req, res) => {  
+
+  Playlist
+    .findOne({
+      _id: req.params.id
+    })
+    .then(playlist => {      
+      res.json(playlist.serialize())
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'something went horribly wrong'
+      });
+    });
+});
+
 // Search track
 router.get('/track/:title', function (req, res) {
   spotify.searchTrack(req.params.title)
@@ -141,24 +153,35 @@ router.get('/track/:title', function (req, res) {
 
 });
 
-// Insert track in playlist
+// Insert track into playlist
 router.post('/playlist/:id/track', function (req, res) {
-  let id = req.params.id;
-  let track = req.body.content;  
   Playlist
-    .findByIdAndUpdate(id, {
-      $push: {content: track}
+    .findByIdAndUpdate(req.params.id, {
+      $push: {
+        content: req.body
+      }
     })
     .then(
       res.end()
     );
-  });   
+});
 
 // Delete track from playlist
-
-
-
-
-
+router.delete('/playlist/:id/track/:trackId', function (req, res) {
+  Playlist
+    .findByIdAndUpdate(req.params.id, {
+      $pull:{content: {songId: req.params.trackId}}})           
+      .then(() => {
+        res.status(204).json({
+          message: 'success'
+        });
+      })
+      .catch(err => {
+        console.error(err);
+        res.status(500).json({
+          error: 'something went wrong'
+        });
+    });
+});
 
 module.exports = router;
