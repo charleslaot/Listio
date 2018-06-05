@@ -1,9 +1,5 @@
 'use strict'
 
-// Dev Channel
-const BASE_URI = 'http://localhost:8080';
-
-
 // Tracks handlers
 function trackHandlers() {
     $('.js-tracksForm').submit(event => {
@@ -19,7 +15,7 @@ function trackHandlers() {
 // Get track list
 function getTracks() {
     return new Promise((resolve, reject) => {
-        let listTracksURL = window.location.href + '/tracks';
+        let listTracksURL = '/tracks';
         const settings = {
             url: listTracksURL,
             dataType: 'json',
@@ -34,7 +30,7 @@ function getTracks() {
 // Search for tracks
 function searchTracks(track) {
     return new Promise((resolve, reject) => {
-        let searchTracksURL = `${BASE_URI}/track/${track}`;
+        let searchTracksURL = `/track/${track}`;
         const settings = {
             url: searchTracksURL,
             dataType: 'json',
