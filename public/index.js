@@ -1,10 +1,31 @@
 'use strict'
 
-// const PLAYLIST_URI = 'https://nameless-springs-69015.herokuapp.com/playlist/';
+const DATA = {
+  results: [],
+  playlist: []
+};
 
-// Dev channel
-const PLAYLIST_URI = 'http://localhost:8080/playlist/';
+function emit(event, payload) {
+  console.log(event, payload);
+  switch (event) {
+    case 'add':
+      console.log('added');
+      
+      break;
+    case 'delete':
+      console.log('deleted');
+      
+      break;
+    case 'edit':
+      console.log('edited');
+      
+      break;
+    case 'fetch':
+      console.log('fetched');      
 
+  }
+  //render();
+}
 // Playlist handler
 $('.js-PlaylistForm').submit(event => {
   event.preventDefault();
@@ -19,7 +40,7 @@ $('.js-PlaylistForm').submit(event => {
 function createPlaylist(listName) {
   return new Promise((resolve, reject) => {
     const settings = {
-      url: PLAYLIST_URI,
+      url: '/playlist',
       data: JSON.stringify({
         title: listName
       }),
@@ -36,7 +57,7 @@ function createPlaylist(listName) {
 function getPlaylists() {
   return new Promise((resolve, reject) => {
     const settings = {
-      url: PLAYLIST_URI,
+      url: '/playlist',
       dataType: 'json',
       type: 'GET',
       contentType: 'application/json; charset=utf-8',

@@ -25,7 +25,7 @@ playlistSchema.methods.serialize = function() {
     id: this._id,        
     content: this.content,
     title: this.title,
-    created: this.created
+    created: this.created.toDateString()
   };
 };
 

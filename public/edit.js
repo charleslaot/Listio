@@ -21,7 +21,7 @@ function emit(event, payload) {
             getTracks(DATA.playlistId);
             break;
         case 'fetch':
-            console.log('fetch');
+            console.log('fetched');
             DATA.playlist = payload;
             displayTracks();
 
