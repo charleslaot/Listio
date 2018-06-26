@@ -33,7 +33,7 @@ function emit(event, payload) {
 function trackHandlers(playlistId) {
     submitSearch(playlistId);
     addTrack(playlistId);
-    deleteTrack(playlistId);
+    deleteTrack();
 };
 
 function submitSearch(playlistId) {
@@ -99,13 +99,13 @@ function addTrack(playlistId) {
     });
 };
 
-function deleteTrack(playlistId) {
+// Delete track from playlist
+function deleteTrack() {
     $('.js-playlist').on('submit', 'form.delete', function (event) {
-        event.preventDefault();
-        let trackId = $(event.currentTarget).parent()[0].id;
-        let addTracksURL = event.target.action;
+        event.preventDefault();        
+        let deleteTracksURL = event.target.action;
         const settings = {
-            url: addTracksURL,
+            url: deleteTracksURL,
             dataType: 'json',
             type: 'DELETE',
             contentType: 'application/json; charset=utf-8',

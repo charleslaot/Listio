@@ -51,7 +51,8 @@ router.post('/playlist', (req, res) => {
 
   Playlist
     .create({
-      title: req.body.title
+      title: req.body.title,
+      userId: req.body.title
     })
     .then(playlist => res.status(201).json(playlist.serialize()))
     .catch(err => {

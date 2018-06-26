@@ -26,6 +26,12 @@ function emit(event, payload) {
   }
   //render();
 }
+
+// Playlist handlers
+function playlistHandler() {
+  deletePlaylist();
+};
+
 // Playlist handler
 $('.js-PlaylistForm').submit(event => {
   event.preventDefault();
@@ -67,6 +73,21 @@ function getPlaylists() {
   });
 };
 
+// Delete playlist
+function deletePlaylist(){
+  $('.js-all-playlist').on('submit', 'form.delete', function (event) {
+    event.preventDefault();    
+    let deletePlaylistURL = event.target.action;
+    const settings = {
+        url: deletePlaylistURL,
+        dataType: 'json',
+        type: 'DELETE',
+        contentType: 'application/json; charset=utf-8',
+    };
+    $.ajax(settings);
+}); 
+}
+
 // Render functions
 function displayPlaylists(data) {
   return new Promise((resolve, reject) => {
@@ -81,7 +102,10 @@ function renderPlaylists(playlist) {
       <br>      
       <div>                         
         <p>Title: <a href="/playlist/${playlist.id}"><span class="itemPlaylist js-itemPlaylist">${playlist.title}</span></p></a>
-        <p>Created: ${playlist.created}</p>                        
+        <p>Created: ${playlist.created}</p>    
+        <form class="delete" action="/playlist/${playlist.id}">
+            <button class='js-deletePlaylistBtn' type="submit">Delete Playlist</button>
+        </form>                    
       </div>
     `;
 };
@@ -90,6 +114,8 @@ function renderPlaylists(playlist) {
 function onPageLoad() {
   getPlaylists()
     .then(displayPlaylists);
+
+  playlistHandler();
 }
 
 $(onPageLoad());
