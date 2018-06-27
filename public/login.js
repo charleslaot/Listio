@@ -12,7 +12,7 @@ function validateUser(userEmail, userPass) {
     const settings = {
       url: '/api/auth/login',
       data: JSON.stringify({
-        email: userEmail,
+        username: userEmail,
         password: userPass
       }),
       dataType: 'json',

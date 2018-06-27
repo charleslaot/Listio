@@ -9,8 +9,20 @@
 
 
 finish playlist edit page
-account creation/login w/ passport
 
-for friday:
+
+account creation/login w/ passport:
+    wed --> integrate endpoints w/ strategies
+    thurs --> clean up & review
+
+
+
+
+
 style documentation
+
 documentation jsdoc 
+
+
+-- "passport auth (worked out 400 issue, should be good now to finish)"
+-- "flesh out application with auth"

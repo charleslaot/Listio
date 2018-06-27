@@ -2,13 +2,17 @@
 
 const express = require('express');
 const router = express.Router();
+const passport = require('passport');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 const spotify = require('../spotify');
 const {
   Playlist
 } = require('../models');
 
 mongoose.Promise = global.Promise;
+
+const jwtAuth = passport.authenticate('jwt', {session: false});
 
 // Server static resources
 router.get('/', function (req, res) {
@@ -37,9 +41,12 @@ router.get('/playlist/:id', function (req, res) {
 
 // Playlist endpoints
 
+router.use(bodyParser.json());
+
 // Create playlist
-router.post('/playlist', (req, res) => {
-  const requiredFields = ["title"];
+router.post('/playlist', jwtAuth, (req, res) => {  
+  console.log(req.body, req.user);
+  const requiredFields = ["title", "username"];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(req.body) || !(field in req.body)) {
@@ -52,7 +59,7 @@ router.post('/playlist', (req, res) => {
   Playlist
     .create({
       title: req.body.title,
-      userId: req.body.title
+      username: req.user.email
     })
     .then(playlist => res.status(201).json(playlist.serialize()))
     .catch(err => {
