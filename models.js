@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const playlistSchema = mongoose.Schema({
-  username: {type: String, required: true},
+  email: {type: String, required: true},
   title: {type: String, required: true},  
   content: [{
     songId: {type: String},
@@ -24,7 +24,7 @@ const playlistSchema = mongoose.Schema({
 playlistSchema.methods.serialize = function() {
   return {
     id: this._id,        
-    username: this.username,
+    email: this.email,
     content: this.content,
     title: this.title,
     created: this.created.toDateString()

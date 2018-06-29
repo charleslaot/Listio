@@ -4,10 +4,13 @@ $('.js-LoginForm').submit(event => {
     event.preventDefault();
     let email = $(event.currentTarget).find('#email').val();
     let pass = $(event.currentTarget).find('#password').val();
-    validateUser(email, pass); 
-  });
+    userValidation(email, pass)
+      .then(data => {
+        userPlaylists(data);
+      });   
+});
 
-function validateUser(userEmail, userPass) {
+function userValidation(userEmail, userPass) {
   return new Promise((resolve, reject) => {
     const settings = {
       url: '/api/auth/login',
@@ -19,7 +22,23 @@ function validateUser(userEmail, userPass) {
       type: 'POST',
       contentType: 'application/json; charset=utf-8',
     };
-    $.ajax(settings);
-    resolve();
+    let results = $.ajax(settings);    
+    resolve(results);
   });
 };
+
+function userPlaylists(jwt) {
+  return new Promise((resolve, reject) => {    
+    const settings = {
+      url: '/',
+      headers: {
+        'Authorization': `Bearer ${jwt.authToken}`        
+      },
+      dataType: 'json',
+      type: 'GET',
+      contentType: 'application/json; charset=utf-8',
+    };
+    $.ajax(settings);    
+  });
+};
+

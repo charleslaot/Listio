@@ -15,10 +15,11 @@ mongoose.Promise = global.Promise;
 const jwtAuth = passport.authenticate('jwt', {session: false});
 
 // Server static resources
-router.get('/', function (req, res) {
-  res.sendFile('index.html', {
-    "root": './views'
-  });
+router.get('/', jwtAuth, function (req, res) {   
+  console.log(" / endpoint ---------------------------------");
+  // res.sendFile('index.html', {
+  //   "root": './views'
+  // });
 });
 
 router.get('/login', function (req, res) {
@@ -46,7 +47,7 @@ router.use(bodyParser.json());
 // Create playlist
 router.post('/playlist', jwtAuth, (req, res) => {  
   console.log(req.body, req.user);
-  const requiredFields = ["title", "username"];
+  const requiredFields = ["title"];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(req.body) || !(field in req.body)) {
@@ -59,7 +60,7 @@ router.post('/playlist', jwtAuth, (req, res) => {
   Playlist
     .create({
       title: req.body.title,
-      username: req.user.email
+      email: req.user.email
     })
     .then(playlist => res.status(201).json(playlist.serialize()))
     .catch(err => {
@@ -72,9 +73,10 @@ router.post('/playlist', jwtAuth, (req, res) => {
 });
 
 // Retrieve all playlists
-router.get('/playlist', (req, res) => {
+router.get('/playlist', jwtAuth, (req, res) => {
+  console.log(req.user);
   Playlist
-    .find()
+    .find({email: req.user.email})
     .then(playlists => {
       res.json(playlists.map(playlist => playlist.serialize()));
     })
