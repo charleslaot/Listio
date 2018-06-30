@@ -4,12 +4,6 @@
 
 //check for repeated playlists names
 
-
-
-
-    
-    
-
 style documentation
 
 documentation jsdoc 
@@ -24,8 +18,12 @@ documentation jsdoc
 
 
 
+
+
 ISSUES 
 
 - using id instead email
+
 - send html on ajax query
+
 - redesign the whole app? 

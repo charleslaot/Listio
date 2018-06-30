@@ -17,9 +17,9 @@ const jwtAuth = passport.authenticate('jwt', {session: false});
 // Server static resources
 router.get('/', jwtAuth, function (req, res) {   
   console.log(" / endpoint ---------------------------------");
-  // res.sendFile('index.html', {
-  //   "root": './views'
-  // });
+  res.sendFile('index.html', {
+    "root": './views'
+  });
 });
 
 router.get('/login', function (req, res) {

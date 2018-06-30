@@ -5,8 +5,9 @@ $('.js-LoginForm').submit(event => {
     let email = $(event.currentTarget).find('#email').val();
     let pass = $(event.currentTarget).find('#password').val();
     userValidation(email, pass)
-      .then(data => {
-        userPlaylists(data);
+      .then(token => {
+        // userPlaylists(token);        
+        location.href = "/"
       });   
 });
 
