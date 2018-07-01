@@ -27,3 +27,12 @@ ISSUES
 - send html on ajax query
 
 - redesign the whole app? 
+
+
+
+----------------------------------------------------------------
+
+authorization with cookies
+
+cookies-parse     ------ secure cookie
+sessions

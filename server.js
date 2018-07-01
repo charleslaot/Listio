@@ -6,7 +6,7 @@ const express = require('express');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const routes = require('./routes/routes');
+const routes = require('./playlists/router');
 const {router: usersRouter} = require('./users');
 const {router: authRouter, localStrategy, jwtStrategy} = require('./auth');
 
@@ -33,14 +33,6 @@ app.use('/api/users/', usersRouter);
 app.use('/api/auth/', authRouter);
 
 const jwtAuth = passport.authenticate('jwt', {session: false});
-
-// A protected endpoint which needs a valid JWT to access it
-// app.get('/api/protected', jwtAuth, (req, res) => {
-//     console.log(req.user);
-//   return res.json({
-//     data: 'rosebud'
-//   });
-// });
 
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
