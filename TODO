@@ -1,38 +1,32 @@
-// encodeURIComponent('nothing else matters')
-
-//test read/:name endpoint
-
-//check for repeated playlists names
-
-style documentation
-
-documentation jsdoc 
-
-
--- "passport auth (worked out 400 issue, should be good now to finish)"
--- "flesh out application with auth"
-
-
-
-
-
-
+#TODO
+    - Functionalities (finish endpoints)
+    - Testing
+    - Styling
+    - Documentation
 
 
 
 ISSUES 
 
-- using id instead email
+    - using id instead email
 
-- send html on ajax query
+    - send html on ajax query
 
-- redesign the whole app? 
+    - authorization with cookies
+
+    - cookies-parse --> secure cookie
+
+    - sessions (npm?)
 
 
 
-----------------------------------------------------------------
+// encodeURIComponent('nothing else matters')
 
-authorization with cookies
+// test read/:name endpoint
 
-cookies-parse     ------ secure cookie
-sessions
+// check for repeated playlists names
+
+// style documentation
+
+// documentation jsdoc
+

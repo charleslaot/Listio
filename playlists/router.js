@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 const express = require('express');
 const router = express.Router();
@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const spotify = require('./spotify');
 const {
   Playlist
-} = require('../models');
+} = require('../playlists/models');
 
 mongoose.Promise = global.Promise;
 
@@ -16,7 +16,13 @@ const jwtAuth = passport.authenticate('jwt', {session: false});
 
 // STATIC RESOURCES
 
-router.get('/', function (req, res) {   
+router.get('/', function (req, res) {     
+  res.sendFile('index.html', {
+    "root": './views'
+  });
+});
+
+router.get('/playlists', function (req, res) {   
   console.log(" / endpoint ---------------------------------");
   res.sendFile('playlists.html', {
     "root": './views'

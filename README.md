@@ -29,20 +29,25 @@
 # MVP
 
 + Login or Sign Up with username
-+ Search & Filter the music API for songs.
++ Search the music API for songs.
 + Create/Read/Update/Delete playlists. (CRUD)    
-+ Filter/Search playlists by title/time/genre/creator/songsNumber/lastModified/...
++ Add/Read/Delete songs in playlists.
 
 
 # USER SCREENS
 
++ Land Page Screen
 + Login Screen
 + Sign Up Screen
-+ Screen for seeing, filter/search or delete the user's playlists (Home Playlist Screen)
-+ Screen for create and/or edit the user's playlist (Create/Edit Screen)    
++ Screen for add, read, update or delete the playlists (Home Playlist Screen)
++ Screen for edit the user's playlist (Create/Edit Screen)    
 
 
 # USER FLOW
+
++ Land Page Screen
+    - User click on Sign Up button --> Sign Up Screen
+    - User click on Log In button --> Log In Screen
 
 + Login Screen
     - User enter valid username and password --> Home Playlist Screen
@@ -57,8 +62,7 @@
     - User click on create playlist button --> Create/Edit Screen
     - User click on edit playlist button -->  Create/Edit Screen
     - User click on playlist name -->  Create/Edit Screen
-    - User click on delete playlist button --> Confirmation Popup --> Delete Playlist        
-    - User filter and/or search on filter menu and/or search bar --> Show matching playlists
+    - User click on delete playlist button --> Confirmation Popup --> Delete Playlist            
 
 + Create/Edit Screen
     - User search on search bar --> Show matching songs from API

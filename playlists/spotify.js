@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var access_token = '';
 const request = require('request');

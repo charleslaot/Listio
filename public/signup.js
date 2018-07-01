@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 $('.js-SignupForm').submit(event => {
     event.preventDefault();    
