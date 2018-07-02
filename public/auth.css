@@ -1,0 +1,10 @@
+
+body {
+    margin: 5%;
+    background-color: black;
+    color: yellow
+}
+
+.itemPlaylist:hover {
+    cursor: pointer;
+}

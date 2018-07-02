@@ -6,8 +6,8 @@ const express = require('express');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const routes = require('./playlists/router');
 const {router: usersRouter} = require('./users');
+const {router: playlistRouter} = require('./playlists');
 const {router: authRouter, localStrategy, jwtStrategy} = require('./auth');
 
 const app = express();
@@ -24,13 +24,12 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(morgan('common'));
 
-app.use(routes);
+app.use(authRouter);
+app.use(usersRouter);
+app.use(playlistRouter);
 
 passport.use(localStrategy);
 passport.use(jwtStrategy);
-
-app.use('/api/users/', usersRouter);
-app.use('/api/auth/', authRouter);
 
 const jwtAuth = passport.authenticate('jwt', {session: false});
 

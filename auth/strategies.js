@@ -1,20 +1,16 @@
 'use strict';
 
-const { Strategy: LocalStrategy } = require('passport-local');
-
-const { Strategy: JwtStrategy, ExtractJwt } = require('passport-jwt');
-
-const { User } = require('../users/models');
-const { JWT_SECRET } = require('../config');
+const {Strategy: LocalStrategy} = require('passport-local');
+const {Strategy: JwtStrategy, ExtractJwt} = require('passport-jwt');
+const {User} = require('../users/models');
+const {JWT_SECRET} = require('../config');
 
 const localStrategy = new LocalStrategy((userEmail, userPassword, callback) => {
   let user;  
   User.findOne({email: userEmail})
     .then(_user => {
       user = _user;
-      if (!user) {
-        // Return a rejected promise so we break out of the chain of .thens.
-        // Any errors like this will be handled in the catch block.
+      if (!user) {        
         return Promise.reject({
           reason: 'LoginError',
           message: 'Incorrect username or password'
@@ -41,10 +37,8 @@ const localStrategy = new LocalStrategy((userEmail, userPassword, callback) => {
 
 const jwtStrategy = new JwtStrategy(
   {
-    secretOrKey: JWT_SECRET,
-    // Look for the JWT as a Bearer auth header
-    jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),
-    // Only allow HS256 tokens - the same as the ones we issue
+    secretOrKey: JWT_SECRET,    
+    jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('Bearer'),    
     algorithms: ['HS256']
   },
   (payload, done) => {

@@ -6,9 +6,7 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const spotify = require('./spotify');
-const {
-  Playlist
-} = require('../playlists/models');
+const {Playlist} = require('./models');
 
 mongoose.Promise = global.Promise;
 
@@ -22,8 +20,7 @@ router.get('/', function (req, res) {
   });
 });
 
-router.get('/playlists', function (req, res) {   
-  console.log(" / endpoint ---------------------------------");
+router.get('/playlists', function (req, res) {     
   res.sendFile('playlists.html', {
     "root": './views'
   });
@@ -52,39 +49,10 @@ router.get('/playlist/:id', function (req, res) {
 
 router.use(bodyParser.json());
 
-// Create playlist
-router.post('/playlist', jwtAuth, (req, res) => {  
-  console.log(req.body, req.user);
-  const requiredFields = ["title"];
-  for (let i = 0; i < requiredFields.length; i++) {
-    const field = requiredFields[i];
-    if (!(req.body) || !(field in req.body)) {
-      const message = `Missing \`${field}\` in request body or body is undefined`;
-      console.error(message);
-      return res.status(400).send(message);
-    }
-  }
-
+// Fetch all playlists
+router.get('/playlist', jwtAuth, (req, res) => {    
   Playlist
-    .create({
-      title: req.body.title,
-      email: req.user.email
-    })
-    .then(playlist => res.status(201).json(playlist.serialize()))
-    .catch(err => {
-      console.error(err);
-      res.status(500).json({
-        error: 'Something went wrong'
-      });
-    });
-
-});
-
-// Retrieve all playlists
-router.get('/playlist', jwtAuth, (req, res) => {
-  console.log(req.user);
-  Playlist
-    .find({email: req.user.email})
+    .find({userID : req.user.id})
     .then(playlists => {
       res.json(playlists.map(playlist => playlist.serialize()));
     })
@@ -96,6 +64,31 @@ router.get('/playlist', jwtAuth, (req, res) => {
     });
 });
 
+// Create playlist
+router.post('/playlist', jwtAuth, (req, res) => {    
+  const requiredFields = ["title"];
+  for (let i = 0; i < requiredFields.length; i++) {
+    const field = requiredFields[i];
+    if (!(req.body) || !(field in req.body)) {
+      const message = `Missing \`${field}\` in request body or body is undefined`;
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+  Playlist
+    .create({
+      title: req.body.title,
+      userID: req.user.id
+    })
+    .then(playlist => res.status(201).json(playlist.serialize()))
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'Something went wrong'
+      });
+    });
+
+});
 
 // Update a playlist
 router.put('/playlist/:id', (req, res) => {
@@ -111,7 +104,6 @@ router.put('/playlist/:id', (req, res) => {
       updated[field] = req.body[field];
     }
   });
-
   Playlist
     .findByIdAndUpdate(req.params.id, {
       $set: updated
@@ -202,4 +194,4 @@ router.delete('/playlist/:id/track/:trackId', function (req, res) {
     });
 });
 
-module.exports = router;
+module.exports = {router};

@@ -4,7 +4,10 @@ $('.js-SignupForm').submit(event => {
     event.preventDefault();    
     let email = $(event.currentTarget).find('#email').val();
     let pass = $(event.currentTarget).find('#password').val();
-    createUser(email, pass); 
+    createUser(email, pass)
+      .then(( ) => {
+        location.href = '/login';
+      })
   });
 
 function createUser(userEmail, userPass) {

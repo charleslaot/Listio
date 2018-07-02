@@ -5,6 +5,8 @@ const DATA = {
   playlist: []
 };
 
+// CONTROL LOGIC
+
 function emit(event, payload) {
   console.log(event, payload);
   switch (event) {
@@ -27,43 +29,44 @@ function emit(event, payload) {
   //render();
 }
 
-// Playlist handlers
-function playlistHandler() {
-  deletePlaylist();
-};
-
-// Playlist handler
-$('.js-PlaylistForm').submit(event => {
-  event.preventDefault();
-  let playlistName = $(event.currentTarget).find('.js-newPlaylistName').val();
-  $('.js-newPlaylistName').val('');
-  createPlaylist(playlistName)
-    .then(getPlaylists)
-    .then(displayPlaylists);
-});
+// PLAYLISTS FUNCTIONS
 
 // Create playlist
-function createPlaylist(listName) {
-  return new Promise((resolve, reject) => {
-    const settings = {
-      url: '/playlist',
-      data: JSON.stringify({
-        title: listName
-      }),
-      dataType: 'json',
-      type: 'POST',
-      contentType: 'application/json; charset=utf-8',
-    };
-    $.ajax(settings);
-    resolve();
+function createPlaylist() {
+  $('.js-PlaylistForm').submit(event => {
+    event.preventDefault();
+    let playlistName = $(event.currentTarget).find('.js-newPlaylistName').val();
+    $('.js-newPlaylistName').val('');
+    return new Promise((resolve, reject) => {
+      const settings = {
+        url: '/playlist',
+        headers: {
+          'Authorization': `Bearer ${sessionStorage.token}`        
+        },
+        data: JSON.stringify({
+          title: playlistName
+        }),
+        dataType: 'json',
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8',
+      };
+      $.ajax(settings);
+      resolve()
+    })
+    .then(getPlaylists)
+    .then(displayPlaylists);
   });
 };
+
 
 // Get all playlists
 function getPlaylists() {
   return new Promise((resolve, reject) => {
     const settings = {
       url: '/playlist',
+      headers: {
+        'Authorization': `Bearer ${sessionStorage.token}`        
+      },
       dataType: 'json',
       type: 'GET',
       contentType: 'application/json; charset=utf-8',
@@ -79,16 +82,20 @@ function deletePlaylist(){
     event.preventDefault();    
     let deletePlaylistURL = event.target.action;
     const settings = {
-        url: deletePlaylistURL,
-        dataType: 'json',
-        type: 'DELETE',
-        contentType: 'application/json; charset=utf-8',
+      url: deletePlaylistURL,
+      headers: {
+        'Authorization': `Bearer ${sessionStorage.token}`        
+      },
+      dataType: 'json',
+      type: 'DELETE',
+      contentType: 'application/json; charset=utf-8',
     };
     $.ajax(settings);
-}); 
+  }); 
 }
 
-// Render functions
+// RENDER
+
 function displayPlaylists(data) {
   return new Promise((resolve, reject) => {
     let results = data.map((item) => renderPlaylists(item)).reverse();
@@ -99,23 +106,26 @@ function displayPlaylists(data) {
 
 function renderPlaylists(playlist) {
   return `
-      <br>      
-      <div>                         
-        <p>Title: <a href="/playlist/${playlist.id}"><span class="itemPlaylist js-itemPlaylist">${playlist.title}</span></p></a>
-        <p>Created: ${playlist.created}</p>    
-        <form class="delete" action="/playlist/${playlist.id}">
-            <button class='js-deletePlaylistBtn' type="submit">Delete Playlist</button>
-        </form>                    
-      </div>
-    `;
+  <br>      
+  <div>                         
+  <p>Title: <a href="/playlist/${playlist.id}"><span class="itemPlaylist js-itemPlaylist">${playlist.title}</span></p></a>
+  <p>Created: ${playlist.created}</p>    
+  <form class="delete" action="/playlist/${playlist.id}">
+  <button class='js-deletePlaylistBtn' type="submit">Delete Playlist</button>
+  </form>                    
+  </div>
+  `;
 };
 
-// When page loads handler
-function onPageLoad() {
+
+// ON PAGE LOAD
+
+function onPageLoad() {  
   getPlaylists()
     .then(displayPlaylists);
+  
+  createPlaylist();  
+  deletePlaylist();
+};
 
-  playlistHandler();
-}
-
-$(onPageLoad());
+$(onPageLoad);
