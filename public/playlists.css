@@ -8,3 +8,7 @@ body {
 .itemPlaylist:hover {
     cursor: pointer;
 }
+
+.form-control {
+    margin: 5px 0;
+}

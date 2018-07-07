@@ -1,10 +1,4 @@
 
-body {
-    margin: 5%;
-    background-color: black;
-    color: yellow
-}
-
-.itemPlaylist:hover {
-    cursor: pointer;
+.form-control {
+    margin: 5px 0;
 }
