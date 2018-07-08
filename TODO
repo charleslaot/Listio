@@ -1,22 +1,11 @@
 #TODO
-    - Functionalities (finish endpoints)
+    - Functionalities 
     - Testing
     - Styling
     - Documentation
 
 
 
-ISSUES 
-
-    - using id instead email
-
-    - send html on ajax query
-
-    - authorization with cookies
-
-    - cookies-parse --> secure cookie
-
-    - sessions (npm?)
 
 
 
@@ -29,4 +18,3 @@ ISSUES
 // style documentation
 
 // documentation jsdoc
-

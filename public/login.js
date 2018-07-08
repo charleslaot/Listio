@@ -6,7 +6,7 @@ $('.js-LoginForm').submit(event => {
     let pass = $(event.currentTarget).find('#password').val();
     userValidation(email, pass)
       .then(token => {                 
-        sessionStorage.token = token.authToken;            
+        sessionStorage.setItem('token', token.authToken); 
         location.href = "/playlists";
       });   
 });
