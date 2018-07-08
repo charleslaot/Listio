@@ -2,3 +2,9 @@ body {
     background: url(https://image.ibb.co/b4fMhT/alice_moore_192521_unsplash_1.jpg) no-repeat center center fixed;
     background-size: cover;
 }
+
+.index-container {
+    background: red;
+    text-align: right;
+    margin: 50% 0;
+}
