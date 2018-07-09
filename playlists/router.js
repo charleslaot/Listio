@@ -117,7 +117,7 @@ router.put('/playlist/:id', (req, res) => {
 });
 
 // Delete a playlist
-router.delete('/playlist/:id', (req, res) => {
+router.delete('/playlist/:name/:id', (req, res) => {
   Playlist
     .findByIdAndRemove(req.params.id)
     .then(() => {

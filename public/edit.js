@@ -7,7 +7,7 @@ const DATA = {
 };
 
 function emit(event, payload) {
-    console.log(event, payload);
+    console.log(event, 'event');
     switch (event) {
         case 'search':
             DATA.results = payload;
