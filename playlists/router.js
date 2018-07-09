@@ -9,6 +9,7 @@ const spotify = require('./spotify');
 const {Playlist} = require('./models');
 
 mongoose.Promise = global.Promise;
+router.use(bodyParser.json());
 
 const jwtAuth = passport.authenticate('jwt', {session: false});
 
@@ -46,8 +47,6 @@ router.get('/playlist/:id', function (req, res) {
 
 
 // PLAYLISTS ENDPOINTS
-
-router.use(bodyParser.json());
 
 // Fetch all playlists
 router.get('/playlist', jwtAuth, (req, res) => {    

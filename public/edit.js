@@ -58,7 +58,7 @@ function getTracks(playlistId) {
         let results = $.ajax(settings);
         resolve(results)
     }).then((playlist) => {        
-        $('.playlist-name').html(`<span>${playlist.title}</span> Playlist`);
+        $('.playlist-name').html(`<span>${playlist.title}</span>`);
         emit('fetch', playlist);
     });
 };

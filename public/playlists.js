@@ -79,7 +79,7 @@ function deletePlaylist(){
 
 // RENDER
 
-function displayPlaylists(data) {
+function displayPlaylists(data) {  
   return new Promise((resolve, reject) => {
     let results = data.map((item) => renderPlaylists(item)).reverse();
     $('.js-all-playlists').html(results);
@@ -90,10 +90,11 @@ function displayPlaylists(data) {
   });
 };
 
-function renderPlaylists(playlist) {
+function renderPlaylists(playlist) {  
   return `        
   <div class="playlist-item" id=${playlist.id}>                         
     <h2><a href="/playlist/${playlist.id}"><span class="js-itemPlaylist">${playlist.title}</span></a></h2>
+    <h5>${playlist.content.length} Songs</h5>
     <h6>Created: ${playlist.created}</h6>    
     <form class="form-delete" action="playlist/${playlist.title}/${playlist.id}">
       <button class='btn btn-success js-deletePlaylistBtn' type="submit"><span class="delete-label">Delete</span></button>

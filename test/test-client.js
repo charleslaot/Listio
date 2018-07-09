@@ -8,11 +8,19 @@ const expect = chai.expect;
 
 chai.use(chaiHttp);
 
-describe('App render endpoints', function () {        
+describe('App render endpoints', function () {       
+
+    it('landpage should return status 200', function () {
+        return chai.request(app)
+            .get('/')
+            .then(function (response) {
+                expect(response).to.have.status(200);
+            })
+    })
 
     it('list playlist page should return status 200', function () {
         return chai.request(app)
-            .get('/')
+            .get('/playlists')
             .then(function (response) {
                 expect(response).to.have.status(200);
             })
