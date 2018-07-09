@@ -1,6 +1,6 @@
 'use strict';
 
-$('.js-LoginForm').submit(event => {
+$('.js-LogInForm').submit(event => {
     event.preventDefault();
     let email = $(event.currentTarget).find('#email').val();
     let pass = $(event.currentTarget).find('#password').val();
@@ -27,3 +27,5 @@ function userValidation(userEmail, userPass) {
     resolve(results);
   });
 };
+
+$(".auth-container").hide().fadeIn(1500);

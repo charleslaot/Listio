@@ -85,7 +85,7 @@ function normalizeTracks(trackItem){
         songAlbum: trackItem.album.name,
         releaseDate: trackItem.album.release_date,
         duration: trackItem.duration_ms,
-        thumbnail: trackItem.album.images[2].url, 
+        thumbnail: trackItem.album.images[1].url, 
         explicit: trackItem.explicit, 
         preview: trackItem.preview_url,
         popularity: trackItem.popularity

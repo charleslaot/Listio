@@ -3,8 +3,22 @@ body {
     background-size: cover;
 }
 
-.index-container {
-    background: red;
-    text-align: right;
-    margin: 50% 0;
+.index-container {    
+    display: inline-block;
+    position: absolute;    
+    top: 25%;
+    left: 55%;        
 }
+
+.page-header {
+    font-size: 15vw;        
+}
+
+.form-container {    
+    text-align: center;    
+}
+
+.btn {
+    border-radius: 20px !important;    
+    margin: 2px; 
+} 

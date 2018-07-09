@@ -1,6 +1,6 @@
 'use strict';
 
-$('.js-SignupForm').submit(event => {
+$('.js-SignUpForm').submit(event => {
     event.preventDefault();    
     let email = $(event.currentTarget).find('#email').val();
     let pass = $(event.currentTarget).find('#password').val();
@@ -26,3 +26,5 @@ function createUser(userEmail, userPass) {
     resolve();
   });
 };
+
+$(".auth-container").hide().fadeIn(1500);

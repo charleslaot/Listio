@@ -4,7 +4,7 @@ body {
     background-size: cover;
 }
 
-.yourPlaylists-container {    
+.editPlaylist-container {    
     display: block;
     margin: 50px 0;
 }
@@ -24,7 +24,7 @@ body {
     margin: 2px;     
 } 
 
-.playlist-item {
+.track-item {
     background: rgba(255, 143, 175, 0.3);
     text-align: center;
     width: 20%;
@@ -37,13 +37,22 @@ body {
     width: 120px;
 }
 
-.playlist-item button {    
+.track-item button {    
     height: 20px;
     font-size: 0.8em;    
 }
 
-.delete-label {
+.action-label {
     position: relative;
     bottom: 5px;
+}
+
+.track-img {
+    width: 80%;
+    margin-bottom: 10px
+}
+
+p {
+    font-family: 'Chela One', cursive;
 }
 

@@ -25,8 +25,7 @@ function emit(event, payload) {
             DATA.playlist = payload;
             displayTracks();
 
-    }
-    //render();
+    }    
 }
 
 // Tracks handlers
@@ -122,16 +121,14 @@ function displayTracks() {
 
 function renderTrack(result) {
     return `
-    <br>
-    <br>
-    <div id=${result.songId}>  
-    <img src='${result.thumbnail}'>
+    <div class="track-item" id=${result.songId}>  
+        <img class='track-img' src='${result.thumbnail}'>
+        <h3>${result.songTitle}</h3>        
+        <h6>Artist: ${result.songArtist}</h6>        
+        <h6>Album: "${result.songAlbum}"</h6>                        
         <form class="delete" action="/playlist/${DATA.playlistId}/track/${result.songId}">
-            <button class='js-deleteTrackBtn' type="submit">Delete Track</button>
+            <button class='js-deleteTrackBtn btn btn-success' type="submit"><span class='action-label'>Delete</span></button>
         </form>
-        <p>Song: ${result.songTitle}</p>        
-        <p>Artist: ${result.songArtist}</p>        
-        <p>Album: ${result.songAlbum}</p>                        
     </div>
     `;
 };
@@ -143,11 +140,11 @@ function displaySearchTracks() {
 
 function renderSearchTracks(result) {
     return `     
-        <div id=${result.songId}>         
-            <img src='${result.thumbnail}'>
-            <button class='js-addTrackBtn'>Add Track</button>                     
-            <p>Song: ${result.songTitle}</p>        
-            <p>Artist: ${result.songArtist}</p>                
+        <div class='track-item' id=${result.songId}>         
+            <img class='track-img' src='${result.thumbnail}'>
+            <h3>${result.songTitle}</h3>        
+            <h6>Artist: ${result.songArtist}</h6>                
+            <button class='js-addTrackBtn btn btn-success'><span class='action-label'>Add Track</span></button>                     
         </div>
     `;
 }

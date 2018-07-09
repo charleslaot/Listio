@@ -2,21 +2,14 @@
     box-sizing: border-box;
 }
 
-body {
-    margin: 5%;
-    background-color: black;
-    color: yellow
-}
-
-button {
-    width: 120px;
-    height: 40px;
-}
-
 i {
     margin: 5px;
 }
 
 h1 {
-    font-family: 'Permanent Marker', cursive;
+    font-family: 'Permanent Marker', Lucida Console, cursive;
+}
+
+h2, h3, h4, h5, h6 {
+    font-family: 'Chela One', cursive;
 }

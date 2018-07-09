@@ -91,13 +91,12 @@ function displayPlaylists(data) {
 };
 
 function renderPlaylists(playlist) {
-  return `
-  <br>      
-  <div>                         
-    <p>Title: <a href="/playlist/${playlist.id}"><span class="itemPlaylist js-itemPlaylist">${playlist.title}</span></p></a>
-    <p>Created: ${playlist.created}</p>    
+  return `        
+  <div class="playlist-item">                         
+    <h2><a href="/playlist/${playlist.id}"><span class="js-itemPlaylist">${playlist.title}</span></a></h2>
+    <h6>Created: ${playlist.created}</h6>    
     <form class="delete" action="/playlist/${playlist.id}">
-      <button class='js-deletePlaylistBtn' type="submit">Delete Playlist</button>
+      <button class='btn btn-success js-deletePlaylistBtn' type="submit"><span class="delete-label">Delete</span></button>
     </form>                    
   </div>
   `;
