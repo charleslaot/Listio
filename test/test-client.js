@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 
 describe('App render endpoints', function () {        
 
-    it('home page should return status 200', function () {
+    it('list playlist page should return status 200', function () {
         return chai.request(app)
             .get('/')
             .then(function (response) {
@@ -34,9 +34,9 @@ describe('App render endpoints', function () {
             })
     })
 
-    it('edit page should return status 200', function () {
+    it('playlist edit page should return status 200', function () {
         return chai.request(app)
-            .get('/edit/:name')
+            .get('/playlist/:id')
             .then(function (response) {
                 expect(response).to.have.status(200);
             });
