@@ -19,7 +19,7 @@ function getTrackOptions(searchTerm, access_token) {
         qs: {
             q: `${searchTerm}`,
             type: 'track',
-            limit: '10'
+            limit: '28'
         }
     };
     return trackOptions;

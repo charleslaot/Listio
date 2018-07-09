@@ -67,13 +67,15 @@ function createPlaylist() {
 
 // Delete playlist
 function deletePlaylist(){
-  $('.js-all-playlist').on('submit', 'form.delete', function (event) {
+  $('.js-all-playlists').on('submit', 'form', function (event) {    
     event.preventDefault();    
+    console.log('event', event);
     let deletePlaylistURL = event.target.action;
-    request('DELETE', deletePlaylistURL)  
-      .then((results) => {
-        emit('deleted');      
-      });   
+    console.log('deletePlaylistURL', deletePlaylistURL);
+    // request('DELETE', deletePlaylistURL)  
+    //   .then((results) => {
+    //     emit('deleted');      
+    //   });   
   });
 }
 
@@ -92,10 +94,10 @@ function displayPlaylists(data) {
 
 function renderPlaylists(playlist) {
   return `        
-  <div class="playlist-item">                         
+  <div class="playlist-item" id=${playlist.id}>                         
     <h2><a href="/playlist/${playlist.id}"><span class="js-itemPlaylist">${playlist.title}</span></a></h2>
     <h6>Created: ${playlist.created}</h6>    
-    <form class="delete" action="/playlist/${playlist.id}">
+    <form class="form-delete" action="#">
       <button class='btn btn-success js-deletePlaylistBtn' type="submit"><span class="delete-label">Delete</span></button>
     </form>                    
   </div>

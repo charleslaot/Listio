@@ -24,7 +24,6 @@ function emit(event, payload) {
             console.log('fetched');
             DATA.playlist = payload;
             displayTracks();
-
     }    
 }
 
@@ -58,7 +57,8 @@ function getTracks(playlistId) {
         };
         let results = $.ajax(settings);
         resolve(results)
-    }).then((playlist) => {
+    }).then((playlist) => {        
+        $('.playlist-name').html(`<span>${playlist.title}</span> Playlist`);
         emit('fetch', playlist);
     });
 };
@@ -100,7 +100,7 @@ function addTrack(playlistId) {
 
 // Delete track from playlist
 function deleteTrack() {
-    $('.js-playlist').on('submit', 'form.delete', function (event) {
+    $('.js-playlist').on('submit', 'form', function (event) {
         event.preventDefault();        
         let deleteTracksURL = event.target.action;
         const settings = {

@@ -24,9 +24,15 @@ body {
     margin: 2px;     
 } 
 
+.allPlaylists-grid {
+    text-align: center;    
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 6fr));    
+}
+
 .playlist-item {
-    background: rgba(255, 143, 175, 0.3);
-    text-align: center;
+    background: rgba(255, 143, 175, 0.3);    
+    margin: 0 auto;
     width: 20%;
     min-width: 200px;
     margin: 50px auto;

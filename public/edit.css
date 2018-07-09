@@ -52,3 +52,9 @@ body {
     margin-bottom: 10px
 }
 
+.searchTrack-grid, .editPlaylist-grid {
+    text-align: center;    
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 6fr)); 
+}
+
