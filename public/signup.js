@@ -22,8 +22,7 @@ function createUser(userEmail, userPass) {
       type: 'POST',
       contentType: 'application/json; charset=utf-8',
     };
-    $.ajax(settings);
-    resolve();
+    return $.ajax(settings);    
   });
 };
 
