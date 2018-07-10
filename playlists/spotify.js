@@ -93,7 +93,6 @@ function normalizeTracks(trackItem){
     return track;
 };
 
-
 // Handler for search tracks
 function searchTrack(searchTerm) {
     return promiseRetry(function (retry, number) {
@@ -108,7 +107,7 @@ function searchTrack(searchTerm) {
                 });
                 return tracks;
             }, function (err) {
-                // ..
+                console.log('Something went wrong, error: ', err);
             });
 };
 
