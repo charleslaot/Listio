@@ -39,8 +39,6 @@ function emit(event, payload) {
     };
 };
 
-
-
 function request(method, url, body){
     return Promise.resolve()
     .then(() => {
