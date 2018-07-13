@@ -90,12 +90,7 @@ router.post('/playlist', jwtAuth, (req, res) => {
 });
 
 // Update a playlist
-router.put('/playlist/:id', (req, res) => {
-  if (!(req.params.id && req.body.id && req.params.id === req.body.id)) {
-    res.status(400).json({
-      error: 'Request path id and request body id values must match'
-    });
-  }
+router.put('/playlist/:id', (req, res) => { 
   const updated = {};
   const updateableFields = ['title'];
   updateableFields.forEach(field => {
@@ -116,7 +111,7 @@ router.put('/playlist/:id', (req, res) => {
 });
 
 // Delete a playlist
-router.delete('/playlist/:name/:id', (req, res) => {
+router.delete('/playlist/:id', (req, res) => {
   Playlist
     .findByIdAndRemove(req.params.id)
     .then(() => {

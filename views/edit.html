@@ -26,9 +26,16 @@
         <div class="form-container">
             <form action="#" class="js-tracksForm">
                 <input type="text" class="form-control js-newTrackName" placeholder="Search for songs" required>
-                <button type="submit" class="btn btn-success">Search</button>
+                <h6 class="no-results">Nothing found, try something else !</h6>
+                <button type="submit" class="submit-btn btn btn-success">
+                    <div class="loader"></div>
+                    <span>Search</span>
+                </button>
             </form>
         </div>
+        <h5 class="back-arrow">
+            <a href="javascript:history.back()"><-- Back To Playlists</a>
+        </h5>
         <div class="searchTrack-grid js-searchTracks"></div>
         <div class="editPlaylist-grid js-playlist"></div>
     </div>

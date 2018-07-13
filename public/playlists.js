@@ -8,6 +8,7 @@ function emit(event, payload) {
   switch (event) {
 
     case 'added':
+    case 'edited':
     case 'deleted':
       getPlaylists();        
       break;
@@ -55,7 +56,7 @@ function getPlaylists() {
 // Create playlist
 function createPlaylist() {
   $('.js-PlaylistForm').submit(event => {
-    event.preventDefault();
+    event.preventDefault();    
     let playlistName = $(event.currentTarget).find('.js-newPlaylistName').val();
     $('.js-newPlaylistName').val('');
     request('POST', '/playlist', {title: playlistName})  
@@ -65,17 +66,47 @@ function createPlaylist() {
   });
 };
 
+// Edit Playlist Name
+function editPlaylist(){
+  $('.js-all-playlists').on('click', '.fa-edit', function (event){  
+    event.preventDefault();      
+    $(this).hide();
+    $('.delete-playlist-btn').hide();
+    $(this.closest('.js-playlist-name'))      
+      .replaceWith(`
+        <form class="form-edit" action="#">          
+          <input type="text" class="form-control edit-playlist-name js-editPlaylistName" placeholder="New Name" required>          
+          <button type="submit" class="btn btn-success">
+            <span class='edit-label'>Submit</span>
+          </button>
+        </form>
+      `);
+  });  
+
+  $('.js-all-playlists').on('submit', '.form-edit', function (event) {
+    event.preventDefault();    
+    let newPlaylistName = $(event.currentTarget).find('.js-editPlaylistName').val();     
+    let editPlaylistID = event.target.parentElement.id;    
+    request('PUT', `/playlist/${editPlaylistID}`, {title: newPlaylistName})  
+      .then(() => {
+        emit('edited'); 
+      });
+  });
+};
+
+
+
 // Delete playlist
 function deletePlaylist(){
-  $('.js-all-playlists').on('submit', 'form', function (event) {    
+  $('.js-all-playlists').on('submit', '.form-delete', function (event) {    
     event.preventDefault();        
-    let deletePlaylistURL = event.target.action;    
-    request('DELETE', deletePlaylistURL)  
+    let deletePlaylistID = event.target.parentElement.id;     
+    request('DELETE', `/playlist/${deletePlaylistID}`)  
       .then((results) => {
         emit('deleted');      
       });   
   });
-}
+};
 
 // RENDER
 
@@ -93,11 +124,18 @@ function displayPlaylists(data) {
 function renderPlaylists(playlist) {  
   return `        
   <div class="playlist-item" id=${playlist.id}>                         
-    <h2><a href="/playlist/${playlist.id}"><span class="js-itemPlaylist">${playlist.title}</span></a></h2>
+    <h2 class="js-playlist-name">
+      <a href="/playlist/${playlist.id}">
+        <span class="js-itemPlaylist">${playlist.title}</span>
+      </a>
+      <i class="fas fa-edit"></i>
+    </h2>
     <h5>${playlist.content.length} Songs</h5>
     <h6>Created: ${playlist.created}</h6>    
-    <form class="form-delete" action="playlist/${playlist.title}/${playlist.id}">
-      <button class='btn btn-success js-deletePlaylistBtn' type="submit"><span class="delete-label">Delete</span></button>
+    <form class="form-delete" action="#">
+      <button class='btn btn-success delete-playlist-btn js-deletePlaylistBtn' type="submit">
+        <span class="delete-label">Delete</span>
+      </button>
     </form>                    
   </div>
   `;
@@ -106,8 +144,9 @@ function renderPlaylists(playlist) {
 // ON PAGE LOAD
 
 function onPageLoad() {  
-  getPlaylists()
+  getPlaylists();
   createPlaylist();  
+  editPlaylist();  
   deletePlaylist();
 };
 
