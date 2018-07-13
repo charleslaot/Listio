@@ -5,9 +5,9 @@ $('.js-SignUpForm').submit(event => {
     let email = $(event.currentTarget).find('#email').val();
     let pass = $(event.currentTarget).find('#password').val();
     createUser(email, pass)
-      .then(( ) => {
-        location.href = '/login';
-      })
+      .then(() => {        
+        location.href = "/login";
+      });
   });
 
 function createUser(userEmail, userPass) {
@@ -22,7 +22,8 @@ function createUser(userEmail, userPass) {
       type: 'POST',
       contentType: 'application/json; charset=utf-8',
     };
-    return $.ajax(settings);    
+    let results = $.ajax(settings);    
+    resolve(results);    
   });
 };
 
