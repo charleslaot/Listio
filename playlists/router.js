@@ -165,9 +165,10 @@ router.post('/playlist/:id/track', function (req, res) {
         content: req.body
       }
     })
-    .then(
-      res.end()
-    );
+    .then(() => {
+      res.status(204);
+      res.end();
+    });
 });
 
 // Delete track from playlist

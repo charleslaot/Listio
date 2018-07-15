@@ -106,10 +106,8 @@ function addTrack(playlistId) {
         let trackId = event.target.parentElement.id; 
         let selectedTrack = DATA.results.find((item) => item.songId === trackId);        
         request('POST', `${baseURI}/track`, selectedTrack)
-        .then(() => {
-            console.log(event);
-            emit('add');
-            
+        .then(() => {            
+            emit('add');            
         });     
     });
 };
