@@ -21,25 +21,25 @@ router.get('/', function (req, res) {
   });
 });
 
-router.get('/playlists', function (req, res) {     
+router.get('/playlists', (req, res) => {     
   res.sendFile('playlists.html', {
     "root": './views'
   });
 });
 
-router.get('/login', function (req, res) {
+router.get('/login', (req, res) => {
   res.sendFile('login.html', {
     "root": './views'
   });
 });
 
-router.get('/signup', function (req, res) {
+router.get('/signup', (req, res) => {
   res.sendFile('signup.html', {
     "root": './views'
   });
 });
 
-router.get('/playlist/:id', function (req, res) {
+router.get('/playlist/:id', (req, res) => {
   res.sendFile('edit.html', {
     "root": './views'
   });
@@ -90,7 +90,7 @@ router.post('/playlist', jwtAuth, (req, res) => {
 });
 
 // Update a playlist
-router.put('/playlist/:id', (req, res) => { 
+router.put('/playlist/:id', jwtAuth, (req, res) => { 
   const updated = {};
   const updateableFields = ['title'];
   updateableFields.forEach(field => {
@@ -111,7 +111,7 @@ router.put('/playlist/:id', (req, res) => {
 });
 
 // Delete a playlist
-router.delete('/playlist/:id', (req, res) => {
+router.delete('/playlist/:id', jwtAuth, (req, res) => {
   Playlist
     .findByIdAndRemove(req.params.id)
     .then(() => {
@@ -131,7 +131,7 @@ router.delete('/playlist/:id', (req, res) => {
 // TRACKS ENDPOINTS
 
 // Retrieve playlist track list
-router.get('/playlist/:id/tracks', (req, res) => {  
+router.get('/playlist/:id/tracks', jwtAuth, (req, res) => {  
 
   Playlist
     .findOne({
@@ -149,7 +149,7 @@ router.get('/playlist/:id/tracks', (req, res) => {
 });
 
 // Search track
-router.get('/track/:title', function (req, res) {
+router.get('/track/:title', jwtAuth, (req, res) => {
   spotify.searchTrack(req.params.title)
     .then(function (data) {
       res.json(data);
@@ -158,7 +158,7 @@ router.get('/track/:title', function (req, res) {
 });
 
 // Insert track into playlist
-router.post('/playlist/:id/track', function (req, res) {
+router.post('/playlist/:id/track', jwtAuth, (req, res) => {
   Playlist
     .findByIdAndUpdate(req.params.id, {
       $push: {
@@ -172,7 +172,7 @@ router.post('/playlist/:id/track', function (req, res) {
 });
 
 // Delete track from playlist
-router.delete('/playlist/:id/track/:trackId', function (req, res) {
+router.delete('/playlist/:id/track/:trackId', jwtAuth, (req, res) => {
   Playlist
     .findByIdAndUpdate(req.params.id, {
       $pull:{content: {songId: req.params.trackId}}})           

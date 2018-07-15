@@ -50,7 +50,7 @@ router.post('/api/users/', jsonParser, (req, res) => {
 
   const sizedFields = {    
     password: {
-      min: 8,
+      min: 1,
       max: 72
     }
   };
@@ -83,16 +83,14 @@ router.post('/api/users/', jsonParser, (req, res) => {
   return User.find({email})
     .count()
     .then(count => {
-      if (count > 0) {
-        // There is an existing user with the same username
+      if (count > 0) {       
         return Promise.reject({
           code: 422,
           reason: 'ValidationError',
           message: 'email already taken',
           location: 'email'
         });
-      }
-      // If there is no existing user, hash the password
+      }      
       return User.hashPassword(password);
     })
     .then(hash => {
@@ -104,9 +102,7 @@ router.post('/api/users/', jsonParser, (req, res) => {
     .then(user => {
       return res.status(201).json(user.serialize());
     })
-    .catch(err => {
-      // Forward validation errors on to the client, otherwise give a 500
-      // error because something unexpected has happened
+    .catch(err => {    
       if (err.reason === 'ValidationError') {
         return res.status(err.code).json(err);
       }

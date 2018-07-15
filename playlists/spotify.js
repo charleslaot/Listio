@@ -19,7 +19,7 @@ function getTrackOptions(searchTerm, access_token) {
         qs: {
             q: `${searchTerm}`,
             type: 'track',
-            limit: '28'
+            limit: '50'
         }
     };
     return trackOptions;
@@ -40,15 +40,14 @@ const tokenOptions = {
 // Request tracks from Spotify
 function requestTracks(searchTerm) {
     return new Promise((resolve, reject) => {
-        request(getTrackOptions(searchTerm, access_token), function (error, response, body) {
-
+        request(getTrackOptions(searchTerm, access_token), (error, response, body) => {
             if (response.statusCode === 200) {
                 console.log('200 OK tracks received');
                 resolve(body);
             } else if ((JSON.parse(body).error.message === "The access_token expired") ||
                 (response.statusCode === 400 || response.statusCode === 401)) { //refactor
                 console.log('Expired or empty access_token:', access_token);
-                requestToken().then(function () {
+                requestToken().then(() => {
                     reject();
                 });
             } else {
@@ -62,7 +61,7 @@ function requestTracks(searchTerm) {
 // Request access token from Spotify
 function requestToken() {
     return new Promise((resolve, reject) => {
-        request(tokenOptions, function (error, response, body) {
+        request(tokenOptions, (error, response, body) => {
             if (response.statusCode === 200) {
                 access_token = body.access_token;
                 console.log('access_token generated');
@@ -95,18 +94,18 @@ function normalizeTracks(trackItem){
 
 // Handler for search tracks
 function searchTrack(searchTerm) {
-    return promiseRetry(function (retry, number) {
+    return promiseRetry((retry, number) => {
             console.log('attempt number', number);
             return requestTracks(searchTerm)
                 .catch(retry);
             })
-            .then(function (result) {
+            .then((result) => {
                 let data = JSON.parse(result);                
                 let tracks = data.tracks.items.map(item => {                                        
                     return normalizeTracks(item);                   
                 });
                 return tracks;
-            }, function (err) {
+            }, (err) => {
                 console.log('Something went wrong, error: ', err);
             });
 };

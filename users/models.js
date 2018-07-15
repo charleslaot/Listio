@@ -17,17 +17,17 @@ const UserSchema = mongoose.Schema({
     }
 });
 
-UserSchema.methods.serialize = function () {
+UserSchema.methods.serialize = function() {
     return {        
         id: this._id,         
     };
 };
 
-UserSchema.methods.validatePassword = function (password) {
+UserSchema.methods.validatePassword = function(password) {
     return bcrypt.compare(password, this.password);
 };
 
-UserSchema.statics.hashPassword = function (password) {
+UserSchema.statics.hashPassword = function(password) {
     return bcrypt.hash(password, 10);
 };
 
