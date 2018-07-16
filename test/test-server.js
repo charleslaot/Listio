@@ -14,7 +14,7 @@ const expect = chai.expect;
 chai.use(chaiHttp);
 
 
-// HELPER FUNCTIONS
+// FUNCTIONS HELPERs
 
 function seedData() {    
 
@@ -28,12 +28,14 @@ function seedData() {
     .then((results) => {                
         return seedAppData(results);        
     })
-    .then((user) => {              
-       return generateAuthTokens(user);                        
+    .then((data) => {              
+       return generateAuthTokens(data);                        
     }); 
 };
 
-function generateAuthTokens(user){          
+function generateAuthTokens(data){          
+
+    let user = data[0];
 
     return chai.request(app)
     .post('/api/auth/login')
@@ -41,8 +43,9 @@ function generateAuthTokens(user){
         username: user[0].email,
         password: user[0].password
     })
-    .then((res) => {                
-        return res.body.authToken
+    .then((res) => {   
+        data[0].authToken = res.body.authToken;             
+        return data;
     });    
 };
 
@@ -60,8 +63,9 @@ function seedAppData(Data){
 
         seedPlaylists.push(generatePlaylistData(seedTrackData, Data[0].id));        
     }    
-    Playlist.insertMany(seedPlaylists); 
-    return Data;
+    Playlist.insertMany(seedPlaylists);
+    let userAndPlaylistData = [Data, seedPlaylists];
+    return userAndPlaylistData;
 };
 
 function registerUser(Data) {
@@ -80,7 +84,7 @@ function registerUser(Data) {
 
     // for (let i = 0; i < userData.length; i++){
         // let options = {
-        //     url: 'http://localhost:8080/api/users/',
+        //     url: 'api/users/',
         //     method: 'POST',
         //     data: userData[i]
         // };
@@ -208,22 +212,21 @@ describe('Playlist API resource', function () {
     
     after(function () {
         return closeServer();
-    });   
-    
+    });       
       
     describe('GET playlist endpoint', function () {
         
         it('should return all existing playlists', function () {
             
             return seedData()
-            .then((token) => {            
+            .then((data) => {            
 
                 let res;                
                 
                 return chai.request(app)
                 .get('/playlist')             
                 .set({
-                    'Authorization': `Bearer ${token}`        
+                    'Authorization': `Bearer ${data[0].authToken}`        
                   })
                 .then(function (_res) {
                     res = _res;
@@ -241,14 +244,14 @@ describe('Playlist API resource', function () {
         it('should return playlists with right fields', function () {
 
             return seedData()
-            .then((token) => {     
+            .then((data) => {     
 
                 let resPlaylist;
 
                 return chai.request(app)
                 .get('/playlist')
                 .set({
-                    'Authorization': `Bearer ${token}`        
+                    'Authorization': `Bearer ${data[0].authToken}`        
                 })
                 .then(function (res) {
                     expect(res).to.have.status(200);
@@ -290,12 +293,12 @@ describe('Playlist API resource', function () {
             const newPlaylist = generatePlaylistData();
 
             return seedData()
-            .then((token) => {
+            .then((data) => {
 
                 return chai.request(app)
                     .post('/playlist')
                     .set({
-                        'Authorization': `Bearer ${token}`        
+                        'Authorization': `Bearer ${data[0].authToken}`        
                     })
                     .send(newPlaylist)
                     .then(function (res) {
@@ -322,7 +325,7 @@ describe('Playlist API resource', function () {
             };
 
             return seedData()
-            .then((token) => {
+            .then((data) => {
 
                 return Playlist
                     .findOne()
@@ -332,7 +335,7 @@ describe('Playlist API resource', function () {
                         return chai.request(app)
                             .put(`/playlist/${playlist.id}`)
                             .set({
-                                'Authorization': `Bearer ${token}`        
+                                'Authorization': `Bearer ${data[0].authToken}`        
                             })
                             .send(updateData);
                     })
@@ -356,7 +359,7 @@ describe('Playlist API resource', function () {
             let playlist;
 
             return seedData()
-            .then((token) => {
+            .then((data) => {
 
                 return Playlist
                     .findOne()
@@ -365,7 +368,7 @@ describe('Playlist API resource', function () {
                         return chai.request(app)
                         .delete(`/playlist/${playlist.id}`)
                         .set({
-                            'Authorization': `Bearer ${token}`        
+                            'Authorization': `Bearer ${data[0].authToken}`        
                         })
                     })
                     .then(function (res) {
@@ -381,4 +384,53 @@ describe('Playlist API resource', function () {
 });
 
 // Tracks endpoints
+describe('Track API resource', function () {
+    
+    before(function () {
+        return runServer(TEST_DATABASE_URL);
+    });
+    
+    afterEach(function () {
+        return tearDownDb();
+    });
+    
+    after(function () {
+        return closeServer();
+    });  
+
+    describe('GET track endpoint', function () {
+        
+        it('should return all tracks in a playlists', function () {
+            
+            return seedData()
+            .then((data) => {            
+
+                let res;
+                let playlist;                                
+                
+                return Playlist
+                .findOne()
+                .then(function (_playlist){                    
+                    playlist = _playlist;                    
+                    return chai.request(app)
+                    .get(`/playlist/${playlist.id}/tracks`)             
+                    .set({
+                        'Authorization': `Bearer ${data[0].authToken}`        
+                    })
+                })
+                .then(function (_res) {
+                    res = _res;                    
+                    expect(res).to.have.status(200); 
+                    expect(res).to.be.a('object');                   
+                    return Playlist.count();
+                    })
+                .then(function (count) {
+                    // 
+                });
+            }); 
+        });
+
+    });
+
+});
 
