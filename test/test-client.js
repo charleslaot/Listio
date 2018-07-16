@@ -1,52 +1,52 @@
-'use strict';
+// 'use strict';
 
-const chai = require('chai');
-const {app} = require('../server');
-const chaiHttp = require('chai-http');
+// const chai = require('chai');
+// const {app} = require('../server');
+// const chaiHttp = require('chai-http');
 
-const expect = chai.expect;
+// const expect = chai.expect;
 
-chai.use(chaiHttp);
+// chai.use(chaiHttp);
 
-describe('App render endpoints', function () {       
+// describe('App render endpoints', function () {       
 
-    it('landpage should return status 200', function () {
-        return chai.request(app)
-            .get('/')
-            .then(function (response) {
-                expect(response).to.have.status(200);
-            })
-    })
+//     it('landpage should return status 200', function () {
+//         return chai.request(app)
+//             .get('/')
+//             .then(function (response) {
+//                 expect(response).to.have.status(200);
+//             })
+//     })
 
-    it('list playlist page should return status 200', function () {
-        return chai.request(app)
-            .get('/playlists')
-            .then(function (response) {
-                expect(response).to.have.status(200);
-            })
-    })
+//     it('list playlist page should return status 200', function () {
+//         return chai.request(app)
+//             .get('/playlists')
+//             .then(function (response) {
+//                 expect(response).to.have.status(200);
+//             })
+//     })
 
-    it('login page should return status 200', function () {
-        return chai.request(app)
-            .get('/login')
-            .then(function (response) {
-                expect(response).to.have.status(200);
-            })
-    })
+//     it('login page should return status 200', function () {
+//         return chai.request(app)
+//             .get('/login')
+//             .then(function (response) {
+//                 expect(response).to.have.status(200);
+//             })
+//     })
 
-    it('sign up page should return status 200', function () {
-        return chai.request(app)
-            .get('/signup')
-            .then(function (response) {
-                expect(response).to.have.status(200);
-            })
-    })
+//     it('sign up page should return status 200', function () {
+//         return chai.request(app)
+//             .get('/signup')
+//             .then(function (response) {
+//                 expect(response).to.have.status(200);
+//             })
+//     })
 
-    it('playlist edit page should return status 200', function () {
-        return chai.request(app)
-            .get('/playlist/:id')
-            .then(function (response) {
-                expect(response).to.have.status(200);
-            });
-    });
-});
+//     it('playlist edit page should return status 200', function () {
+//         return chai.request(app)
+//             .get('/playlist/:id')
+//             .then(function (response) {
+//                 expect(response).to.have.status(200);
+//             });
+//     });
+// });
