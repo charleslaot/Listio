@@ -13,78 +13,82 @@ const expect = chai.expect;
 
 chai.use(chaiHttp);
 
-// 
 
-function seedData() {
-    console.info('seeding data');   
+// HELPER FUNCTIONS
+
+function seedData() {    
 
     return Promise.resolve()
     .then(() => {
         return generateUserData();
-    }).then((userData) => {
+    })
+    .then((userData) => {
         return registerUser(userData);        
-    }).then((userData) => {
-        // console.log('----------------------', userData);
-        // seedData(userData);
-        // return generateAuthTokens(userData);
-    });
+    })
+    .then((results) => {                
+        return seedAppData(results);        
+    })
+    .then((user) => {              
+       return generateAuthTokens(user);                        
+    }); 
 };
 
+function generateAuthTokens(user){          
 
+    return chai.request(app)
+    .post('/api/auth/login')
+    .send({
+        username: user[0].email,
+        password: user[0].password
+    })
+    .then((res) => {                
+        return res.body.authToken
+    });    
+};
 
-    // const seedPlaylists = [];    
-    // const userData = generateUserData();
-    // const authTokens = [];
+function seedAppData(Data){   
 
-    // for (let i = 0; 1 < 3; i++) {        
-
-    //     userData.push(generateUserCredentials());        
-    //     authTokens.push(generateUserTokens(userData[i]));
+    const seedPlaylists = [];        
                 
-    //     for (let i = 1; i <= 5; i++) {
-            
-    //         let seedTrackData = [];
-            
-    //         for (let i = 1; i <= 10; i++) {
-    //             seedTrackData.push(generateTrackData()); 
-    //         }        
+    for (let i = 1; i <= 5; i++) {
+        
+        let seedTrackData = [];
+        
+        for (let i = 1; i <= 10; i++) {
+            seedTrackData.push(generateTrackData()); 
+        }        
 
-    //         seedPlaylists.push(generatePlaylistData(seedTrackData, userData[i].id));        
-    //     }    
-
-    // }
-    // return Promise.resolve().then(() => {
-    //     Playlist.insertMany(seedPlaylists);
-    // }).then(() => {
-    //     return authTokens;
-    // }); 
-// };
+        seedPlaylists.push(generatePlaylistData(seedTrackData, Data[0].id));        
+    }    
+    Playlist.insertMany(seedPlaylists); 
+    return Data;
+};
 
 function registerUser(Data) {
 
     var userData = Data;    
 
-    for (let i = 0; i < userData.length; i++){
+    return chai.request(app)
+    .post('/api/users/')
+    .send(userData[0])
+    .then((_res) => {
+        userData[0].id = _res.body.id            
+    })
+    .then(() => {
+        return userData;
+    });
 
-        let options = {
-            url: 'http://localhost:8080/api/users/',
-            method: 'POST',
-            data: userData[i]
-        };
+    // for (let i = 0; i < userData.length; i++){
+        // let options = {
+        //     url: 'http://localhost:8080/api/users/',
+        //     method: 'POST',
+        //     data: userData[i]
+        // };
 
-        request(options, (response, body) => {
-            console.log('BODY ---- -- -- --', body);
-        });
-
-        // return chai.request(app)
-        // .post('/api/users/')
-        // .send(userData[i])
-        // .then((_res) => {
-        //     return _res.body;
+        // request(options, (response, body) => {
+        //     console.log('BODY ---- -- -- --', body);
         // });
-    };
-
-    return userData;
+    // };
 };
 
 function generateUserData() {
@@ -133,69 +137,69 @@ function tearDownDb() {
 }
 
 
+// TESTING
 
-// describe('User creation and authentication', function () {
+// User endpoints, creation and auth
+describe('User creation and authentication', function () {
 
-//     before(function () {
-//         return runServer(TEST_DATABASE_URL);
-//     });    
+    before(function () {
+        return runServer(TEST_DATABASE_URL);
+    });    
     
-//     after(function () {
-//         tearDownDb();
-//         return closeServer();
-//     }); 
+    after(function () {        
+        return closeServer();
+    }); 
     
-//     let userRegCredentials = generateUserCredentials();
+    let userRegCredentials = generateUserCredentials();
 
-//     describe('registering a user', function () {
-//         it('should return the user id', function () {
+    describe('registering a user', function () {
+        it('should return the user id', function () {
 
-//             let res;                
+            let res;                
 
-//             return chai.request(app)
-//             .post('/api/users/')
-//             .send(userRegCredentials)
-//             .then((_res) => {                    
-//                 res = _res;
-//                 expect(res).to.have.status(201);
-//                 expect(res.body).to.be.a('object');
-//                 expect(res.body).to.include.key('id');
-//                 expect(res.body.id).to.have.lengthOf.at.least(1);
-//             });     
-//         });
-//     });
+            return chai.request(app)
+            .post('/api/users/')
+            .send(userRegCredentials)
+            .then((_res) => {                    
+                res = _res;
+                expect(res).to.have.status(201);
+                expect(res.body).to.be.a('object');
+                expect(res.body).to.include.key('id');
+                expect(res.body.id).to.have.lengthOf.at.least(1);
+            });     
+        });
+    });
 
-//     describe('authenticate a user', function () {
-//         it('should return an authentication token', function () {
+    describe('authenticate a user', function () {
+        it('should return an authentication token', function () {
 
-//             let res;            
-//             let userAuthCredentials = {
-//                 username: userRegCredentials.email,
-//                 password: userRegCredentials.password
-//             };                
+            let res;            
+            let userAuthCredentials = {
+                username: userRegCredentials.email,
+                password: userRegCredentials.password
+            };                
             
-//             return chai.request(app)
-//             .post('/api/auth/login')
-//             .send(userAuthCredentials)
-//             .then((_res) => {
-//                 res = _res;                        
-//                 expect(res).to.have.status(200);
-//                 expect(res.body).to.be.a('object');
-//                 expect(res.body).to.include.key('authToken');
-//                 expect(res.body.authToken).to.have.lengthOf.at.least(1);                    
-//             });            
-//         });
-//     });
-// });
+            return chai.request(app)
+            .post('/api/auth/login')
+            .send(userAuthCredentials)
+            .then((_res) => {
+                res = _res;                        
+                expect(res).to.have.status(200);
+                expect(res.body).to.be.a('object');
+                expect(res.body).to.include.key('authToken');
+                expect(res.body.authToken).to.have.lengthOf.at.least(1);                    
+            });            
+        });
+    });
 
+    tearDownDb();    
+});
+
+// Playlist endpoints
 describe('Playlist API resource', function () {
     
     before(function () {
         return runServer(TEST_DATABASE_URL);
-    });
-    
-    beforeEach(function () {        
-        return seedData();
     });
     
     afterEach(function () {
@@ -211,132 +215,170 @@ describe('Playlist API resource', function () {
         
         it('should return all existing playlists', function () {
             
-            // let res;
-            
-            // return chai.request(app)
-            // .get('/playlist')             
-            // .then(function (_res) {
-            //         res = _res;
-            //         expect(res).to.have.status(200);
+            return seedData()
+            .then((token) => {            
 
-            //         expect(res.body).to.have.lengthOf.at.least(1);
-            //         return Playlist.count();
-            //     })
-            //     .then(function (count) {
-            //         expect(res.body).to.have.lengthOf(count);
-            //     });
+                let res;                
+                
+                return chai.request(app)
+                .get('/playlist')             
+                .set({
+                    'Authorization': `Bearer ${token}`        
+                  })
+                .then(function (_res) {
+                    res = _res;
+                    expect(res).to.have.status(200);
+
+                    expect(res.body).to.have.lengthOf.at.least(1);
+                    return Playlist.count();
+                    })
+                .then(function (count) {
+                    expect(res.body).to.have.lengthOf(count);
+                });
+            }); 
         });
 
-        // it('should return playlists with right fields', function () {
+        it('should return playlists with right fields', function () {
 
-        //     let resPlaylist;
+            return seedData()
+            .then((token) => {     
 
-        //     return chai.request(app)
-        //         .get('/playlist')
-        //         .then(function (res) {
-        //             expect(res).to.have.status(200);
-        //             expect(res).to.be.json;
-        //             expect(res.body).to.be.a('array');
-        //             expect(res.body).to.have.lengthOf.at.least(1);
+                let resPlaylist;
 
-        //             res.body.forEach(function (playlist) {
-        //                 expect(playlist).to.be.a('object');
-        //                 expect(playlist).to.include.keys(
-        //                     'title', 'content', 'created');
-        //             });
-        //             resPlaylist = res.body[0];
-        //             return Playlist.findById(resPlaylist.id);
-        //         })
-        //         .then(function (playlist) {
-        //             expect(resPlaylist.title).to.equal(playlist.title);                    
-        //             for (let i = 0; i < playlist.content.length; i++) {                        
-        //                 expect(resPlaylist.content[i].songTitle).to.equal(playlist.content[i].songTitle);
-        //                 expect(resPlaylist.content[i].songArtist).to.equal(playlist.content[i].songArtist);
-        //                 expect(resPlaylist.content[i].songAlbum).to.equal(playlist.content[i].songAlbum);
-        //                 expect(resPlaylist.content[i].releaseDate).to.equal(playlist.content[i].releaseDate.toISOString());
-        //                 expect(resPlaylist.content[i].duration).to.equal(playlist.content[i].duration);
-        //                 expect(resPlaylist.content[i].thumbnail).to.equal(playlist.content[i].thumbnail);
-        //                 expect(resPlaylist.content[i].explicit).to.equal(playlist.content[i].explicit);
-        //                 expect(resPlaylist.content[i].preview).to.equal(playlist.content[i].preview);
-        //                 expect(resPlaylist.content[i].popularity).to.equal(playlist.content[i].popularity);
-        //             }
-        //             expect(resPlaylist.created).to.equal(playlist.created.toISOString());
-        //         });
-        // });
+                return chai.request(app)
+                .get('/playlist')
+                .set({
+                    'Authorization': `Bearer ${token}`        
+                })
+                .then(function (res) {
+                    expect(res).to.have.status(200);
+                    expect(res).to.be.json;
+                    expect(res.body).to.be.a('array');
+                    expect(res.body).to.have.lengthOf.at.least(1);
 
+                    res.body.forEach(function (playlist) {
+                        expect(playlist).to.be.a('object');
+                        expect(playlist).to.include.keys(
+                            'userID', 'title', 'content', 'created');
+                    });
+                    resPlaylist = res.body[0];
+                    return Playlist.findById(resPlaylist.id);
+                })
+                .then(function (playlist) {
+                    expect(resPlaylist.title).to.equal(playlist.title);                    
+                    for (let i = 0; i < playlist.content.length; i++) {                        
+                        expect(resPlaylist.content[i].songTitle).to.equal(playlist.content[i].songTitle);
+                        expect(resPlaylist.content[i].songArtist).to.equal(playlist.content[i].songArtist);
+                        expect(resPlaylist.content[i].songAlbum).to.equal(playlist.content[i].songAlbum);
+                        expect(resPlaylist.content[i].releaseDate).to.equal(playlist.content[i].releaseDate.toISOString());
+                        expect(resPlaylist.content[i].duration).to.equal(playlist.content[i].duration);
+                        expect(resPlaylist.content[i].thumbnail).to.equal(playlist.content[i].thumbnail);
+                        expect(resPlaylist.content[i].explicit).to.equal(playlist.content[i].explicit);
+                        expect(resPlaylist.content[i].preview).to.equal(playlist.content[i].preview);
+                        expect(resPlaylist.content[i].popularity).to.equal(playlist.content[i].popularity);
+                    }
+                    expect(resPlaylist.created).to.equal(playlist.created.toDateString());
+                });
+            });
+        });
     });
 
-    // describe('POST playlist endpoint', function () {
+    describe('POST playlist endpoint', function () {
 
-    //     it('should add a new playlist', function () {
+        it('should add a new playlist', function () {
 
-    //         const newPlaylist = generatePlaylistData();
+            const newPlaylist = generatePlaylistData();
 
-    //         return chai.request(app)
-    //             .post('/playlist')
-    //             .send(newPlaylist)
-    //             .then(function (res) {
-    //                 expect(res).to.have.status(201);
-    //                 expect(res).to.be.json;
-    //                 expect(res.body).to.be.a('object');
-    //                 expect(res.body.id).to.not.be.null;
-    //                 expect(res.body).to.include.keys('title');
-    //                 expect(res.body.title).to.equal(newPlaylist.title);                                        
-    //                 return Playlist.findById(res.body.id);
-    //             })
-    //             .then(function (playlist) {                                        
-    //                 expect(newPlaylist.title).to.equal(playlist.title);                                        
-    //             });
-    //     });
-    // });
+            return seedData()
+            .then((token) => {
 
-    // describe('PUT playlist endpoint', function () {
+                return chai.request(app)
+                    .post('/playlist')
+                    .set({
+                        'Authorization': `Bearer ${token}`        
+                    })
+                    .send(newPlaylist)
+                    .then(function (res) {
+                        expect(res).to.have.status(201);
+                        expect(res).to.be.json;
+                        expect(res.body).to.be.a('object');
+                        expect(res.body.id).to.not.be.null;
+                        expect(res.body).to.include.keys('title');
+                        expect(res.body.title).to.equal(newPlaylist.title);                                        
+                        return Playlist.findById(res.body.id);
+                    })
+                    .then(function (playlist) {                                        
+                        expect(newPlaylist.title).to.equal(playlist.title);                                        
+                    });
+            });
+        });
+    });
 
-    //     it('should update fields you send over', function () {
-    //         const updateData = {
-    //             title: faker.random.words(),                                
-    //         };
+    describe('PUT playlist endpoint', function () {
 
-    //         return Playlist
-    //             .findOne()
-    //             .then(function (playlist) {
-    //                 updateData.id = playlist.id;
+        it('should update fields you send over', function () {
+            const updateData = {
+                title: faker.random.words(),                                
+            };
 
-    //                 return chai.request(app)
-    //                     .put(`/playlist/${playlist.id}`)
-    //                     .send(updateData);
-    //             })
-    //             .then(function (res) {
-    //                 expect(res).to.have.status(204);
-    //                 return Playlist.findById(updateData.id);
-    //             })
-    //             .then(function (playlist) {
-    //                 expect(playlist.id).to.equal(updateData.id);
-    //                 expect(playlist.title).to.equal(updateData.title);
-    //             });
-    //     });
-    // });
+            return seedData()
+            .then((token) => {
+
+                return Playlist
+                    .findOne()
+                    .then(function (playlist) {
+                        updateData.id = playlist.id;
+
+                        return chai.request(app)
+                            .put(`/playlist/${playlist.id}`)
+                            .set({
+                                'Authorization': `Bearer ${token}`        
+                            })
+                            .send(updateData);
+                    })
+                    .then(function (res) {
+                        expect(res).to.have.status(204);
+                        return Playlist.findById(updateData.id);
+                    })
+                    .then(function (playlist) {
+                        expect(playlist.id).to.equal(updateData.id);
+                        expect(playlist.title).to.equal(updateData.title);
+                    });
+            });
+        });
+    });
 
 
-    // describe('DELETE playlist endpoint', function () {
+    describe('DELETE playlist endpoint', function () {
 
-    //     it('delete a playlist by id', function () {
+        it('delete a playlist by id', function () {
 
-    //         let playlist;
+            let playlist;
 
-    //         return Playlist
-    //             .findOne()
-    //             .then(function (_playlist) {
-    //                 playlist = _playlist;
-    //                 return chai.request(app).delete(`/playlist/${playlist.id}`);
-    //             })
-    //             .then(function (res) {
-    //                 expect(res).to.have.status(204);
-    //                 return Playlist.findById(playlist.id);
-    //             })
-    //             .then(function (_playlist) {
-    //                 expect(_playlist).to.be.null;
-    //             });
-//         });
-//     });
+            return seedData()
+            .then((token) => {
+
+                return Playlist
+                    .findOne()
+                    .then(function (_playlist) {
+                        playlist = _playlist;
+                        return chai.request(app)
+                        .delete(`/playlist/${playlist.id}`)
+                        .set({
+                            'Authorization': `Bearer ${token}`        
+                        })
+                    })
+                    .then(function (res) {
+                        expect(res).to.have.status(204);
+                        return Playlist.findById(playlist.id);
+                    })
+                    .then(function (_playlist) {
+                        expect(_playlist).to.be.null;
+                    });
+            });
+        });
+    });
 });
+
+// Tracks endpoints
+

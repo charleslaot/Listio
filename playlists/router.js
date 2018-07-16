@@ -49,7 +49,7 @@ router.get('/playlist/:id', (req, res) => {
 // PLAYLISTS ENDPOINTS
 
 // Fetch all playlists
-router.get('/playlist', (req, res) => {    
+router.get('/playlist', jwtAuth, (req, res) => {    
   Playlist
     .find({userID : req.user.id})
     .then(playlists => {
