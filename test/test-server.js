@@ -14,7 +14,7 @@ const expect = chai.expect;
 chai.use(chaiHttp);
 
 
-// FUNCTIONS HELPERs
+// FUNCTIONS HELPERS
 
 function seedData() {    
 
@@ -28,71 +28,62 @@ function seedData() {
     .then((results) => {                
         return seedAppData(results);        
     })
-    .then((data) => {              
+    .then((data) => { 
+        console.log(data);             
        return generateAuthTokens(data);                        
     }); 
 };
 
 function generateAuthTokens(data){          
 
-    let user = data[0];
+    let users = data[0];
 
-    return chai.request(app)
-    .post('/api/auth/login')
-    .send({
-        username: user[0].email,
-        password: user[0].password
-    })
-    .then((res) => {   
-        data[0].authToken = res.body.authToken;             
-        return data;
-    });    
+    return Promise.all(users.map((user) => {
+        return chai.request(app)
+        .post('/api/auth/login')
+        .send({
+            username: user.email,
+            password: user.password
+        })
+        .then((res) => {   
+            user.authToken = res.body.authToken;             
+            return user;
+        });    
+    }));
 };
 
-function seedAppData(Data){   
+function seedAppData(data){   
 
     const seedPlaylists = [];        
                 
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 0; i < data.length; i++) {
         
         let seedTrackData = [];
         
-        for (let i = 1; i <= 10; i++) {
+        for (let j = 1; j <= 10; j++) {
             seedTrackData.push(generateTrackData()); 
         }        
 
-        seedPlaylists.push(generatePlaylistData(seedTrackData, Data[0].id));        
+        seedPlaylists.push(generatePlaylistData(seedTrackData, data[i].id));        
     }    
-    Playlist.insertMany(seedPlaylists);
-    let userAndPlaylistData = [Data, seedPlaylists];
-    return userAndPlaylistData;
+    return Playlist.insertMany(seedPlaylists)
+    .then((playlist) => {
+        let userAndPlaylistData = [data, playlist];
+        return userAndPlaylistData;
+    });
 };
 
-function registerUser(Data) {
+function registerUser(userData) {
 
-    var userData = Data;    
-
-    return chai.request(app)
-    .post('/api/users/')
-    .send(userData[0])
-    .then((_res) => {
-        userData[0].id = _res.body.id            
-    })
-    .then(() => {
-        return userData;
-    });
-
-    // for (let i = 0; i < userData.length; i++){
-        // let options = {
-        //     url: 'api/users/',
-        //     method: 'POST',
-        //     data: userData[i]
-        // };
-
-        // request(options, (response, body) => {
-        //     console.log('BODY ---- -- -- --', body);
-        // });
-    // };
+    return Promise.all(userData.map((user) => {        
+        return chai.request(app)
+        .post('/api/users/')
+        .send(user)
+        .then((_res) => {
+            user.id = _res.body.id;
+            return user;
+        });
+    }));
 };
 
 function generateUserData() {
@@ -201,11 +192,17 @@ describe('User creation and authentication', function () {
 
 // Playlist endpoints
 describe('Playlist API resource', function () {
+   
+    var data;
     
     before(function () {
-        return runServer(TEST_DATABASE_URL);
-    });
-    
+        return runServer(TEST_DATABASE_URL)
+            .then(seedData)
+            .then((userData) => {
+                data = userData;
+            })
+    });       
+
     afterEach(function () {
         return tearDownDb();
     });
@@ -214,32 +211,45 @@ describe('Playlist API resource', function () {
         return closeServer();
     });       
       
+    
     describe('GET playlist endpoint', function () {
         
-        it('should return all existing playlists', function () {
+        it('should return a 401 unauthorized user', function(){
+
+            let res;                
             
-            return seedData()
-            .then((data) => {            
-
-                let res;                
-                
-                return chai.request(app)
-                .get('/playlist')             
-                .set({
-                    'Authorization': `Bearer ${data[0].authToken}`        
-                  })
-                .then(function (_res) {
-                    res = _res;
-                    expect(res).to.have.status(200);
-
-                    expect(res.body).to.have.lengthOf.at.least(1);
-                    return Playlist.count();
-                    })
-                .then(function (count) {
-                    expect(res.body).to.have.lengthOf(count);
-                });
-            }); 
+            return chai.request(app)
+            .get('/playlist')                         
+            .then(function (_res) {
+                res = _res;
+                expect(res).to.have.status(401);                                
+                })
+            .catch(function (err) {
+                console.log(err);                
+            });        
         });
+        
+        it('should return all existing playlists', function () {
+
+            let res;   
+            console.log(data);
+            return chai.request(app)
+            .get('/playlist')             
+            .set({
+                'Authorization': `Bearer ${data[0].authToken}`        
+                })
+            .then(function (_res) {
+                res = _res;
+                expect(res).to.have.status(200);
+                console.log(res.body);
+                expect(res.body).to.have.lengthOf.at.least(1);
+                return Playlist.count();
+                })
+            .then(function (count) {
+                expect(res.body).to.have.lengthOf(count);
+            });
+        }); 
+        
 
         it('should return playlists with right fields', function () {
 
@@ -433,4 +443,3 @@ describe('Track API resource', function () {
     });
 
 });
-
