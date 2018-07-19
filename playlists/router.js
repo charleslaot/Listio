@@ -55,7 +55,7 @@ router.get('/playlist', jwtAuth, (req, res) => {
     .then(playlists => {
       res.json(playlists.map(playlist => playlist.serialize()));
     })
-    .catch(err => {
+    .catch((err) => {
       console.error(err);
       res.status(500).json({
         error: 'something went wrong'
