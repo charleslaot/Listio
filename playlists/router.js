@@ -152,7 +152,7 @@ router.get('/playlist/:id/tracks', jwtAuth, (req, res) => {
 router.get('/track/:title', jwtAuth, (req, res) => {
   spotify.searchTrack(req.params.title)
     .then(function (data) {
-      res.json(data);
+      res.status(200).json(data);
     });
 
 });
@@ -168,6 +168,12 @@ router.post('/playlist/:id/track', jwtAuth, (req, res) => {
     .then(() => {
       res.status(204);
       res.end();
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'something went wrong'
+      });
     });
 });
 
@@ -175,17 +181,17 @@ router.post('/playlist/:id/track', jwtAuth, (req, res) => {
 router.delete('/playlist/:id/track/:trackId', jwtAuth, (req, res) => {
   Playlist
     .findByIdAndUpdate(req.params.id, {
-      $pull:{content: {songId: req.params.trackId}}})           
-      .then(() => {
-        res.status(204).json({
-          message: 'success'
-        });
-      })
-      .catch(err => {
-        console.error(err);
-        res.status(500).json({
-          error: 'something went wrong'
-        });
+      $pull: {
+        content: {songId: req.params.trackId}
+    }})           
+    .then(() => {
+      res.status(204)
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'something went wrong'
+      });
     });
 });
 

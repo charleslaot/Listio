@@ -9,9 +9,7 @@ const {TEST_DATABASE_URL} = require('../config');
 const {app, runServer, closeServer} = require('../server');
 
 const expect = chai.expect;
-
 chai.use(chaiHttp);
-
 
 // FUNCTIONS HELPERS
 
@@ -274,12 +272,13 @@ describe('Playlist API resource', function () {
                             expect(playlist).to.include.keys(
                                 'userID', 'id', 'title', 'content', 'created');
                         })
-                        resPlaylist = res.body[0];  
-                        console.log('resPlayID', resPlaylist.id);                      
+                        return res;
+                    })
+                    .then((res) => {
+                        resPlaylist = res.body[0];                          
                         return Playlist.findById(resPlaylist.id);
                     })
-                    .then((playlist) => {                      
-                        console.log('playlist==============', playlist.id, resPlaylist.id);  
+                    .then((playlist) => {                                              
                         expect(resPlaylist.title).to.equal(playlist.title);                    
                         for (let i = 0; i < playlist.content.length; i++) {                        
                             expect(resPlaylist.content[i].songTitle).to.equal(playlist.content[i].songTitle);
@@ -370,11 +369,11 @@ describe('Playlist API resource', function () {
                     .findOne()
                     .then(function (_playlist) {
                         playlist = _playlist;
-                            return chai.request(app)
-                                .delete(`/playlist/${playlist.id}`)
-                                .set({
-                                    'Authorization': `Bearer ${user.authToken}`        
-                                })
+                        return chai.request(app)
+                            .delete(`/playlist/${playlist.id}`)
+                            .set({
+                                'Authorization': `Bearer ${user.authToken}`        
+                            })
                         })
                         .then(function (res) {
                             expect(res).to.have.status(204);
@@ -388,54 +387,6 @@ describe('Playlist API resource', function () {
     });
 });
 
-// Tracks endpoints
-describe('Track API resource', function () {
-    
-    before(function () {
-        return runServer(TEST_DATABASE_URL);
-    });
-    
-    afterEach(function () {
-        return tearDownDb();
-    });
-    
-    after(function () {
-        return closeServer();
-    });  
+// EXPORT HELPER FUNCTIONS
 
-    describe('GET track endpoint', function () {
-        
-        it('should return all tracks in a playlists', function () {
-            
-            return seedData()
-            .then((data) => {            
-
-                let res;
-                let playlist;                                
-                
-                return Playlist
-                .findOne()
-                .then(function (_playlist){                    
-                    playlist = _playlist;                    
-                    return chai.request(app)
-                    .get(`/playlist/${playlist.id}/tracks`)             
-                    .set({
-                        'Authorization': `Bearer ${data[0].authToken}`        
-                    })
-                })
-                .then(function (_res) {
-                    res = _res; 
-                    expect(res).to.have.status(200);
-                    expect(res).to.be.a('object');
-                    expect(res.body.content).to.have.lengthOf.at.least(1);
-                    return Playlist.count();
-                    })
-                .then(function (count) {
-                    // 
-                });
-            }); 
-        });
-
-    });
-
-});
+module.exports = {tearDownDb, generateTrackData, seedData};
