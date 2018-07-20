@@ -258,7 +258,7 @@ describe('Playlist API resource', function () {
             return Promise.all(data.map((user) => {                  
                 return chai.request(app)
                     .get('/playlist')      
-                    .send(user.id)       
+                    .send({user: {id : user.id}})       
                     .set({
                         'Authorization': `Bearer ${user.authToken}`        
                     })
@@ -275,12 +275,17 @@ describe('Playlist API resource', function () {
                         return res;
                     })
                     .then((res) => {
-                        resPlaylist = res.body[0];                          
-                        return Playlist.findById(resPlaylist.id);
+                        return Promise.all([
+                            Playlist.findById(res.body[0].id),
+                            res.body[0]
+                        ])
                     })
-                    .then((playlist) => {                                              
-                        expect(resPlaylist.title).to.equal(playlist.title);                    
-                        for (let i = 0; i < playlist.content.length; i++) {                        
+                    .then((data) => {                            
+                        const resPlaylist = data[1];
+                        const playlist = data[0];                                         
+
+                        expect(resPlaylist.title).to.equal(playlist.title);                                            
+                        for (let i = 0; i < playlist.content.length; i++) { 
                             expect(resPlaylist.content[i].songTitle).to.equal(playlist.content[i].songTitle);
                             expect(resPlaylist.content[i].songArtist).to.equal(playlist.content[i].songArtist);
                             expect(resPlaylist.content[i].songAlbum).to.equal(playlist.content[i].songAlbum);

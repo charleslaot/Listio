@@ -6,22 +6,26 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const spotify = require('./spotify');
-const {Playlist} = require('./models');
+const {
+  Playlist
+} = require('./models');
 
 mongoose.Promise = global.Promise;
 router.use(bodyParser.json());
 
-const jwtAuth = passport.authenticate('jwt', {session: false});
+const jwtAuth = passport.authenticate('jwt', {
+  session: false
+});
 
 // STATIC RESOURCES
 
-router.get('/', function (req, res) {     
+router.get('/', function (req, res) {
   res.sendFile('index.html', {
     "root": './views'
   });
 });
 
-router.get('/playlists', (req, res) => {     
+router.get('/playlists', (req, res) => {
   res.sendFile('playlists.html', {
     "root": './views'
   });
@@ -49,9 +53,11 @@ router.get('/playlist/:id', (req, res) => {
 // PLAYLISTS ENDPOINTS
 
 // Fetch all playlists
-router.get('/playlist', jwtAuth, (req, res) => {    
+router.get('/playlist', jwtAuth, (req, res) => {
   Playlist
-    .find({userID : req.user.id})
+    .find({
+      userID: req.user.id
+    })
     .then(playlists => {
       res.json(playlists.map(playlist => playlist.serialize()));
     })
@@ -64,7 +70,7 @@ router.get('/playlist', jwtAuth, (req, res) => {
 });
 
 // Create playlist
-router.post('/playlist', jwtAuth, (req, res) => {    
+router.post('/playlist', jwtAuth, (req, res) => {
   const requiredFields = ["title"];
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
@@ -90,7 +96,7 @@ router.post('/playlist', jwtAuth, (req, res) => {
 });
 
 // Update a playlist
-router.put('/playlist/:id', jwtAuth, (req, res) => { 
+router.put('/playlist/:id', jwtAuth, (req, res) => {
   const updated = {};
   const updateableFields = ['title'];
   updateableFields.forEach(field => {
@@ -131,13 +137,13 @@ router.delete('/playlist/:id', jwtAuth, (req, res) => {
 // TRACKS ENDPOINTS
 
 // Retrieve playlist track list
-router.get('/playlist/:id/tracks', jwtAuth, (req, res) => {  
+router.get('/playlist/:id/tracks', jwtAuth, (req, res) => {
 
   Playlist
     .findOne({
       _id: req.params.id
     })
-    .then(playlist => {      
+    .then(playlist => {
       res.json(playlist.serialize())
     })
     .catch(err => {
@@ -182,10 +188,14 @@ router.delete('/playlist/:id/track/:trackId', jwtAuth, (req, res) => {
   Playlist
     .findByIdAndUpdate(req.params.id, {
       $pull: {
-        content: {songId: req.params.trackId}
-    }})           
+        content: {
+          songId: req.params.trackId
+        }
+      }
+    })
     .then(() => {
       res.status(204)
+      res.end();
     })
     .catch(err => {
       console.error(err);
@@ -195,4 +205,6 @@ router.delete('/playlist/:id/track/:trackId', jwtAuth, (req, res) => {
     });
 });
 
-module.exports = {router};
+module.exports = {
+  router
+};
