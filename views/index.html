@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,21 +14,29 @@
     <link rel="stylesheet" href="/index.css">
     <title>Listio</title>
 </head>
+
 <body>
     <div class="index-container">
-        <div class="header-container">
-            <h1 class="page-header">Listio</h1> 
-        </div>
-        <div class="form-container">
+        <header class="header-container" role="banner">
+            <h1 class="page-header">Listio</h1>
+        </header>
+        <main class="form-container" role="main">
             <form class="js-RegForm" action="#">
-                <button class="js-SignUpBtn btn btn-success" type="submit"><i class="fas fa-user-plus"></i></i>Sign Up</button>
-                <button class="js-LogInBtn btn btn-success" type="submit"><i class="fas fa-sign-in-alt"></i>Log In</button>
-            </form>  
-        </div>     
+                <button class="js-SignUpBtn btn btn-success" type="submit">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Sign Up</span> 
+                </button>
+                <button class="js-LogInBtn btn btn-success" type="submit">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>Log In</span>
+                </button>
+            </form>
+        </main>
     </div>
 </body>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 <script src="/index.js"></script>
+
 </html>
