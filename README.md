@@ -10,7 +10,7 @@ Listio is a web application that allows the user to create, edit and populate th
 
 ## WALKTHROUGH VIDEO
 
-[Listio Walkthrough](https://www.youtube.com/watch?v=Ah9QUKT9Clk)
+[Listio Walkthrough Video](https://www.youtube.com/watch?v=Ah9QUKT9Clk)
 
 ## TECHNOLOGIES USED
 
@@ -32,17 +32,18 @@ Listio is a web application that allows the user to create, edit and populate th
 - Heroku
 - JSDoc
 
-## Screenshot
-
-![screenshot](screenshots/00.PNG)
-
-![screenshot](screenshots/01.PNG)
-
-![screenshot](screenshots/02.PNG)
 
 ## API Documentation
 
-[Documentation](out/global.html)
+[Documentation]()
+
+## Screenshot
+
+![screenshot](screenshots/00.png)
+
+![screenshot](screenshots/01.png)
+
+![screenshot](screenshots/02.png)
 
 
 
