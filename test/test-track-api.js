@@ -2,22 +2,10 @@
 
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const {
-    TEST_DATABASE_URL
-} = require('../config');
-const {
-    Playlist
-} = require('../playlists/models');
-const {
-    app,
-    runServer,
-    closeServer
-} = require('../server');
-const {
-    tearDownDb,
-    generateTrackData,
-    seedData
-} = require('./test-playlist-api');
+const {TEST_DATABASE_URL} = require('../config');
+const {Playlist} = require('../playlists/models');
+const {app, runServer, closeServer} = require('../server');
+const {tearDownDb, generateTrackData, seedData} = require('./test-playlist-api');
 
 const expect = chai.expect;
 chai.use(chaiHttp);

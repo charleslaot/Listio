@@ -1,14 +1,14 @@
 'use strict';
 
 $('.js-LogInForm').submit(event => {
-    event.preventDefault();
-    let email = $(event.currentTarget).find('#email').val();
-    let pass = $(event.currentTarget).find('#password').val();
-    userValidation(email, pass)
-      .then(token => {                 
-        sessionStorage.setItem('token', token.authToken); 
-        location.href = "/playlists";
-      });   
+  event.preventDefault();
+  let email = $(event.currentTarget).find('#email').val();
+  let pass = $(event.currentTarget).find('#password').val();
+  userValidation(email, pass)
+    .then(token => {
+      sessionStorage.setItem('token', token.authToken);
+      location.href = "/playlists";
+    });
 });
 
 function userValidation(userEmail, userPass) {
@@ -23,7 +23,7 @@ function userValidation(userEmail, userPass) {
       type: 'POST',
       contentType: 'application/json; charset=utf-8',
     };
-    let results = $.ajax(settings);    
+    let results = $.ajax(settings);
     resolve(results);
   });
 };
