@@ -35,7 +35,7 @@ Listio is a web application that allows the user to create, edit and populate th
 
 ## API Documentation
 
-[Documentation]()
+[Documentation](https://krloslao.github.io/Listio/global.html)
 
 ## Screenshot
 
