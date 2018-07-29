@@ -12,6 +12,7 @@ const {router: authRouter, localStrategy, jwtStrategy} = require('./auth');
 
 const app = express();
 const {DATABASE_URL, PORT} = require('./config');
+
 mongoose.Promise = global.Promise;
 
 app.set('view engine', 'html');
@@ -31,7 +32,7 @@ app.use(playlistRouter);
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
-const jwtAuth = passport.authenticate('jwt', {session: false});
+// const jwtAuth = passport.authenticate('jwt', {session: false});
 
 app.use((req, res, next) => {
     var err = new Error('Not Found');

@@ -1,13 +1,3 @@
-#TODO
-    - Functionalities 
-    - Styling
-
-    - Testing
-    - Documentation
-
-// check for repeated playlists names
-
-
 
 // documentation jsdoc
 
