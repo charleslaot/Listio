@@ -32,8 +32,6 @@ app.use(playlistRouter);
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 
-// const jwtAuth = passport.authenticate('jwt', {session: false});
-
 app.use((req, res, next) => {
     var err = new Error('Not Found');
     err.status = 404;
