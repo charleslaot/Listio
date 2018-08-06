@@ -8,10 +8,6 @@ Listio is a web application that allows the user to create, edit and populate th
 
 [Listio Demo](https://nameless-springs-69015.herokuapp.com/)
 
-## WALKTHROUGH VIDEO
-
-[Listio Walkthrough Video](https://www.youtube.com/watch?v=Ah9QUKT9Clk)
-
 ## TECHNOLOGIES USED
 
 - HTML
