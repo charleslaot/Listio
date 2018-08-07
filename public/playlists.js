@@ -7,7 +7,10 @@ function emit(event, payload) {
 
   switch (event) {
 
-    case 'added':
+    case 'added':      
+      location.href=`/playlist/${payload.id}`;
+      break;
+
     case 'edited':
     case 'deleted':
       getPlaylists();        
@@ -60,8 +63,8 @@ function createPlaylist() {
     let playlistName = $(event.currentTarget).find('.js-newPlaylistName').val();
     $('.js-newPlaylistName').val('');
     request('POST', '/playlist', {title: playlistName})  
-      .then(() => {
-        emit('added'); 
+      .then((playlist) => {
+        emit('added', playlist); 
       });
   });
 };

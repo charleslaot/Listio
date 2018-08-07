@@ -20,6 +20,7 @@ function emit(event, payload) {
 
         case 'add':
             console.log('added');
+            location.href=`/playlist/${payload}`;
             break;
 
         case 'delete':
@@ -100,6 +101,7 @@ function searchTracks(playlistId) {
 // Insert track into playlist
 function addTrack(playlistId) {
     $('.js-searchTracks').on('submit', 'form', function (event) {
+        let playlistID = playlistId;
         event.preventDefault(); 
         $(event.currentTarget).find('.fa-check-circle').css('display', 'inline');
         let baseURI = event.target.baseURI;        
@@ -107,7 +109,7 @@ function addTrack(playlistId) {
         let selectedTrack = DATA.results.find((item) => item.songId === trackId);        
         request('POST', `${baseURI}/track`, selectedTrack)
         .then(() => {            
-            emit('add');            
+            emit('add', playlistID);            
         });     
     });
 };

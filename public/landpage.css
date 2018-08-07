@@ -14,13 +14,16 @@ body {
     font-size: 15vw;        
 }
 
-.page-motto {
+.page-motto-top, .page-motto-bottom {
     color: white;  
     text-shadow: 2px 2px 8px black;
     -webkit-text-stroke: 1px #00A64F;
     font-size: 2em;
     font-family: 'Permanent Marker', Lucida Console, cursive;
     text-align: center;
+}
+
+.page-motto-bottom {
     margin-bottom: 25px;
 }
 
