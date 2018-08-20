@@ -39,13 +39,3 @@ Listio is a web application that allows the user to create, edit and populate th
 ![screenshot](screenshots/01.png)
 
 ![screenshot](screenshots/02.png)
-
-
-
-
-
-
-
-
-
-
