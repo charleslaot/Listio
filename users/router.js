@@ -6,7 +6,6 @@ const {User} = require('./models');
 const router = express.Router();
 const jsonParser = bodyParser.json();
 
-
 /**
  * Register a new user
  * @name Register a new user
