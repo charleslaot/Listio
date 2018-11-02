@@ -30,7 +30,7 @@ Listio is a web application that allows the user to create, edit and populate pl
 
 ## API Documentation
 
-[API Documentation](https://krloslao.github.io/Listio/global.html)
+[API Documentation](https://carlostrujillo90.github.io/Listio/)
 
 ## Screenshots
 
