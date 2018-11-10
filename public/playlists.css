@@ -48,9 +48,9 @@ body {
     font-size: 0.8em;    
 }
 
-.delete-label {
+.delete-label {    
     position: relative;
-    bottom: 5px;
+    bottom: 7px;
 }
 
 .playlist-item .fas{
