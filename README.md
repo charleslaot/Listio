@@ -28,11 +28,11 @@ Listio is a web application that allows the user to create, edit and populate pl
 - Heroku
 - JSDoc
 
-## API Documentation
+## API DOCUMENTATION
 
 [API Documentation](https://carlostrujillo90.github.io/Listio/)
 
-## Screenshots
+## SCREENSHOTS
 
 ![screenshot](screenshots/00.png)
 
