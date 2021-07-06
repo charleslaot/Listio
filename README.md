@@ -1,8 +1,10 @@
-# LISTIO
+# LISTIO*
 
 ## SUMMARY
 
 Listio is a web application that allows the user to create, edit and populate playlists fetching song's metadata from the Spotify API.
+
+*application demo is unavailable at the moment due to database migration.
 
 ## LIVE DEMO
 
