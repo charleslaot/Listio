@@ -6,7 +6,7 @@ Listio is a web application that allows the user to create, edit and populate pl
 
 ## LIVE DEMO
 
-[Listio Demo](https://nameless-springs-69015.herokuapp.com/)
+Demo is unavalible at the moment, is being migrated to the new MongoDB Atlas platform.
 
 ## TECHNOLOGIES USED
 
