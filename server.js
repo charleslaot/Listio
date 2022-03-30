@@ -1,23 +1,24 @@
 'use strict';
 
-const path = require('path');
+// const path = require('path');
+// const passport = require('passport');
+// const {router: usersRouter} = require('./users');
+// const {router: playlistRouter} = require('./playlists');
+// const {router: authRouter, localStrategy, jwtStrategy} = require('./auth');
+
 const morgan = require('morgan');
 const express = require('express');
-const passport = require('passport');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const {router: usersRouter} = require('./users');
-const {router: playlistRouter} = require('./playlists');
-const {router: authRouter, localStrategy, jwtStrategy} = require('./auth');
+const { MongoClient } = require("mongodb");
 
 const app = express();
 const {DATABASE_URL, PORT} = require('./config');
 
-mongoose.Promise = global.Promise;
-
-app.set('view engine', 'html');
-app.set('views', path.join(__dirname, 'views'));
-app.use(express.static(path.join(__dirname, 'public')));
+// mongoose.Promise = global.Promise;
+// app.set('view engine', 'html');
+// app.set('views', path.join(__dirname, 'views'));
+// app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(bodyParser.json());
 app.use(bodyParser.raw({extended: false}));
@@ -25,12 +26,12 @@ app.use(bodyParser.urlencoded({extended: false}));
 
 app.use(morgan('common'));
 
-app.use(authRouter);
-app.use(usersRouter);
-app.use(playlistRouter);
+// app.use(authRouter);
+// app.use(usersRouter);
+// app.use(playlistRouter);
 
-passport.use(localStrategy);
-passport.use(jwtStrategy);
+// passport.use(localStrategy);
+// passport.use(jwtStrategy);
 
 app.use((req, res, next) => {
     var err = new Error('Not Found');
@@ -46,40 +47,32 @@ app.use((req, res, next) => {
 
 let server;
 
-function runServer(databaseUrl, port = PORT) {
-    return new Promise((resolve, reject) => {
-        mongoose.connect(databaseUrl, err => {
-            if (err) {
-                return reject(err);
-            }
-            server = app.listen(port, () => {
-                    console.log(`Your app is listening on port ${port}`);
-                    resolve();
-                })
-                .on('error', err => {
-                    mongoose.disconnect();
-                    reject(err);
-                });
-        });
+main().catch(err => console.log(err));
+
+async function main() {
+    await mongoose.connect(DATABASE_URL);
+
+    const kittySchema = new mongoose.Schema({
+        name: String
     });
-}
 
-function closeServer() {
-    return mongoose.disconnect().then(() => {
-        return new Promise((resolve, reject) => {
-            console.log('Closing server');
-            server.close(err => {
-                if (err) {
-                    return reject(err);
-                }
-                resolve();
-            });
-        });
-    });
-}
+    kittySchema.methods.speak = function speak() {
+        const greeting = this.name
+        ? "Meow name is " + this.name
+        : "I don't have a name";
+        console.log(greeting);
+    };
 
-if (require.main === module) {
-    runServer(DATABASE_URL).catch(err => console.error(err));
-}
+    const Kitten = mongoose.model('Kitten', kittySchema);
 
-module.exports = {runServer, app, closeServer};
+    const silence = new Kitten({ name: 'Silence' });
+    console.log(silence.name); // 'Silence'
+
+    const fluffy = new Kitten({ name: 'fluffy' });
+    await fluffy.save();
+    fluffy.speak(); // "Meow name is fluffy"
+
+    server = app.listen(PORT, () => {
+        console.log(`Your app is listening on port ${PORT}`);
+    })
+}
