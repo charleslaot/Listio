@@ -9,23 +9,24 @@ Listio is a web application that allows the user to create, edit and populate pl
 Demo is unavalible at the moment, is being migrated to MongoDB Atlas platform.
 
 ## TECHNOLOGIES USED
+### Stack
 
-- HTML
-- CSS
-- JavaScript
-- JQuery
-- Font Awesome
-- Google Fonts
+- Javascript
+- Node.js
+- Express
 - Spotify API
-- NodeJS
-- ExpressJS
+- Stripe API
 - MongoDB
 - Mongoose
+- Firebase
 - JWT Authentication
-- Mocha
-- Chai
-- TravisCI
-- Heroku
+### Testing
+- Jest
+
+### Deployment
+- Github Actions
+- Digital Ocean
+### Documentation
 - JSDoc
 
 ## API DOCUMENTATION
